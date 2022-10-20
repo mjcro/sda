@@ -30,7 +30,7 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
         ));
 
         if (others != null && others.length > 0) {
-            for (final FieldWriterProducer other : others) {
+            for (FieldWriterProducer other : others) {
                 list.add(other);
             }
         }
@@ -38,13 +38,13 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
         return new ReflectiveAutoRegistrationRowMapperFactory(list);
     }
 
-    private List<Field> recursiveFields(final Class<?> clazz) {
+    private List<Field> recursiveFields(Class<?> clazz) {
         if (clazz == Object.class) {
             return List.of();
         }
 
         ArrayList<Field> fields = new ArrayList<>();
-        for (final Field field : clazz.getDeclaredFields()) {
+        for (Field field : clazz.getDeclaredFields()) {
             fields.add(field);
         }
         fields.addAll(recursiveFields(clazz.getSuperclass()));

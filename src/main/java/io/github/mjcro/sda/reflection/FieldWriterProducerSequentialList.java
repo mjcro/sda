@@ -12,13 +12,13 @@ public class FieldWriterProducerSequentialList implements FieldWriterProducer {
     public FieldWriterProducerSequentialList(Iterable<? extends FieldWriterProducer> producerList) {
         this.producerList = new ArrayList<>();
         if (producerList != null) {
-            for (final FieldWriterProducer producer : producerList) {
+            for (FieldWriterProducer producer : producerList) {
                 this.add(producer);
             }
         }
     }
 
-    public void add(final FieldWriterProducer producer) {
+    public void add(FieldWriterProducer producer) {
         if (producer instanceof FieldWriterProducerSequentialList) {
             this.producerList.addAll(((FieldWriterProducerSequentialList) producer).producerList);
         } else if (producer != null) {
@@ -27,8 +27,8 @@ public class FieldWriterProducerSequentialList implements FieldWriterProducer {
     }
 
     @Override
-    public Optional<FieldWriter<?>> apply(final Field field, final String columnName) {
-        for (final FieldWriterProducer producer : producerList) {
+    public Optional<FieldWriter<?>> apply(Field field, String columnName) {
+        for (FieldWriterProducer producer : producerList) {
             Optional<FieldWriter<?>> fieldWriter = producer.apply(field, columnName);
             if (fieldWriter.isPresent()) {
                 return fieldWriter;

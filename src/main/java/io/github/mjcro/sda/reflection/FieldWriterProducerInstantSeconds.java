@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class FieldWriterProducerInstantSeconds implements FieldWriterProducer {
     @Override
-    public Optional<FieldWriter<?>> apply(final Field field, final String columnName) {
+    public Optional<FieldWriter<?>> apply(Field field, String columnName) {
         if (field.getType() != Instant.class) {
             return Optional.empty();
         }

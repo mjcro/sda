@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class FieldWriterProducerDurationMillis implements FieldWriterProducer {
     @Override
-    public Optional<FieldWriter<?>> apply(final Field field, final String columnName) {
+    public Optional<FieldWriter<?>> apply(Field field, String columnName) {
         if (field.getType() != Duration.class) {
             return Optional.empty();
         }

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class FieldWriterProducerByMapperAnnotation implements FieldWriterProducer {
     @Override
-    public Optional<FieldWriter<?>> apply(final Field field, final String columnName) {
+    public Optional<FieldWriter<?>> apply(Field field, String columnName) {
         if (field.isAnnotationPresent(Mapper.class)) {
             try {
                 Class<? extends FieldWriter<?>> clazz = field.getAnnotation(Mapper.class).value();

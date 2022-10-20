@@ -7,11 +7,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BasicRowMapperFactory implements RowMapperFactory {
     private final Map<Class<?>, RowMapper<?>> mappers = new ConcurrentHashMap<>();
 
-    public boolean contains(final Class<?> clazz) {
+    public boolean contains(Class<?> clazz) {
         return clazz != null && mappers.containsKey(clazz);
     }
 
-    public void register(final Class<?> clazz, final RowMapper<?> mapper) {
+    public void register(Class<?> clazz, RowMapper<?> mapper) {
         this.mappers.put(
                 Objects.requireNonNull(clazz, "clazz"),
                 Objects.requireNonNull(mapper, "mapper")

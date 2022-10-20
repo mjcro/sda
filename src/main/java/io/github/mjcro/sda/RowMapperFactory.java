@@ -1,5 +1,5 @@
 package io.github.mjcro.sda;
 
 public interface RowMapperFactory {
-    <T> RowMapper<T> get(final Class<T> clazz);
+    <T> RowMapper<T> get(Class<T> clazz);
 }
