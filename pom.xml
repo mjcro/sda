@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <name>MicroJ Simple Database Adapter</name>
-    <description>Tiny library with simple wrapperd to database</description>
+    <description>Tiny library with simple wrappers to database</description>
     <url>https://github.com/mjcro/sda</url>
 
     <licenses>
