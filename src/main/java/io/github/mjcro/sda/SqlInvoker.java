@@ -6,6 +6,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Defines components able to perform read-only operations on database
+ * with further data mapping into Java classes.
+ */
 public interface SqlInvoker {
     /**
      * @return SQL invoker dialect to use.

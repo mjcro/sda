@@ -9,13 +9,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Basic implementation of {@link SqlInvoker}.
+ */
 public class BasicSqlInvoker implements SqlInvoker {
     private final Dialect dialect;
-    private final ConnectionProvider connectionProvider;
-    private final RowMapperFactory rowMapperFactory;
-    private final PlaceholderMapper placeholderMapper;
-    private final SqlTracer sqlTracer;
+    protected final ConnectionProvider connectionProvider;
+    protected final RowMapperFactory rowMapperFactory;
+    protected final PlaceholderMapper placeholderMapper;
+    protected final SqlTracer sqlTracer;
 
+    /**
+     * Main constructor.
+     *
+     * @param dialect            Dialect, supported by this invoker.
+     * @param connectionProvider Connection provider to use.
+     * @param rowMapperFactory   Row mapper used to map rows to Java objects.
+     * @param placeholderMapper  Placeholder mapper used to map incoming placeholders before passing them
+     *                           to database. Optional.
+     * @param sqlTracer          Component used to track SQL timings and errors. Optional.
+     */
     public BasicSqlInvoker(
             Dialect dialect,
             ConnectionProvider connectionProvider,
@@ -26,8 +39,13 @@ public class BasicSqlInvoker implements SqlInvoker {
         this.dialect = Objects.requireNonNull(dialect, "dialect");
         this.connectionProvider = Objects.requireNonNull(connectionProvider, "connectionProvider");
         this.rowMapperFactory = Objects.requireNonNull(rowMapperFactory, "rowMapperFactory");
-        this.placeholderMapper = Objects.requireNonNull(placeholderMapper, "placeholderMapper");
-        this.sqlTracer = Objects.requireNonNull(sqlTracer, "sqlTracer");
+        this.placeholderMapper = placeholderMapper == null
+                ? value -> value
+                : placeholderMapper;
+        this.sqlTracer = sqlTracer == null
+                ? (sql, placeholders, elapsed, error) -> {
+        }
+                : sqlTracer;
     }
 
     @Override
