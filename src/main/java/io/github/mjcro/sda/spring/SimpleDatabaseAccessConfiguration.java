@@ -6,9 +6,11 @@ import io.github.mjcro.sda.CommonClassesRowMapperFactoryAdapter;
 import io.github.mjcro.sda.ConnectionProvider;
 import io.github.mjcro.sda.DataSourceConnectionProvider;
 import io.github.mjcro.sda.Dialect;
+import io.github.mjcro.sda.PlaceholderMapper;
 import io.github.mjcro.sda.RowMapperFactory;
 import io.github.mjcro.sda.SqlInvoker;
 import io.github.mjcro.sda.SqlModifier;
+import io.github.mjcro.sda.SqlTracer;
 import io.github.mjcro.sda.reflection.ReflectiveAutoRegistrationRowMapperFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,18 +31,33 @@ public class SimpleDatabaseAccessConfiguration {
     public SqlModifier sqlModifier(
             RowMapperFactory factory,
             ConnectionProvider connectionProvider,
-            Supplier<Dialect> dialectSupplier
+            Supplier<Dialect> dialectSupplier,
+            PlaceholderMapper mapper,
+            SqlTracer sqlTracer
     ) {
-        return new BasicSqlModifier(dialectSupplier.get(), connectionProvider, factory, $ -> $);
+        return new BasicSqlModifier(dialectSupplier.get(), connectionProvider, factory, mapper, sqlTracer);
     }
 
     @Bean
     public SqlInvoker sqlInvoker(
             RowMapperFactory factory,
             ConnectionProvider connectionProvider,
-            Supplier<Dialect> dialectSupplier
+            Supplier<Dialect> dialectSupplier,
+            PlaceholderMapper mapper,
+            SqlTracer sqlTracer
     ) {
-        return new BasicSqlInvoker(dialectSupplier.get(), connectionProvider, factory, $ -> $);
+        return new BasicSqlInvoker(dialectSupplier.get(), connectionProvider, factory, mapper, sqlTracer);
+    }
+
+    @Bean
+    public PlaceholderMapper placeholderMapper() {
+        return value -> value;
+    }
+
+    @Bean
+    public SqlTracer sqlTracer() {
+        return (sql, placeholders, elapsed, error) -> {
+        };
     }
 
     @Bean

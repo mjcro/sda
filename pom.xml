@@ -109,6 +109,12 @@
             <version>5.3.23</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>5.3.23</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.testng</groupId>
