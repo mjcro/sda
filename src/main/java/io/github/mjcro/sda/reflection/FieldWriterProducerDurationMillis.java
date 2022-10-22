@@ -6,6 +6,10 @@ import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.Optional;
 
+/**
+ * Field writer that populates {@link Duration} fields using milliseconds
+ * values obtained from database.
+ */
 public class FieldWriterProducerDurationMillis implements FieldWriterProducer {
     @Override
     public Optional<FieldWriter<?>> apply(Field field, String columnName) {
