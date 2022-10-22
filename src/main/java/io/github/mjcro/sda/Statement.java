@@ -1,6 +1,7 @@
 package io.github.mjcro.sda;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -95,6 +96,35 @@ public interface Statement extends StatementPrototype {
             }
             throw new UnsupportedDialectException(dialect);
         };
+    }
+
+    /**
+     * Returns true if both statements has same query and placeholders.
+     *
+     * @param a First statement.
+     * @param b Second statement.
+     * @return True if statements has same query and placeholder.
+     */
+    static boolean basicallyEquals(Statement a, Statement b) {
+        if (a == null || b == null) {
+            return false; // If any of statements is null they are not equal.
+        }
+
+        if (!a.getSql().equals(b.getSql())) {
+            return false; // SQL differs
+        }
+
+        return Arrays.equals(a.getPlaceholders(), b.getPlaceholders());
+    }
+
+    /**
+     * Constructs basic (standard) hash code for given statement.
+     *
+     * @param s Statement to calculate hash for.
+     * @return Calculated hash code.
+     */
+    static int basicHashCode(Statement s) {
+        return s == null ? 0 : s.getSql().hashCode();
     }
 
     @Override

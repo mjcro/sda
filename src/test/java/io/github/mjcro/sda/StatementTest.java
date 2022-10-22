@@ -72,4 +72,20 @@ public class StatementTest {
         Assert.assertEquals(statement.getPlaceholders()[0], 33L);
         Assert.assertEquals(statement.getPlaceholders()[1], "Fooer");
     }
+
+    @Test
+    public void testEquality() {
+        Statement a = new StatementQueryOnly("SELECT * FROM `user`");
+        Statement b = new StatementSimple("SELECT * FROM `user`", new Object[0]);
+        Statement c = new StatementSimple("SELECT * FROM `user`", new Object[]{true});
+
+        Assert.assertEquals(a, b);
+        Assert.assertEquals(b, a);
+        Assert.assertEquals(a.hashCode(), b.hashCode());
+
+        Assert.assertNotEquals(a, c);
+        Assert.assertNotEquals(b, c);
+        Assert.assertNotEquals(c, a);
+        Assert.assertNotEquals(c, b);
+    }
 }

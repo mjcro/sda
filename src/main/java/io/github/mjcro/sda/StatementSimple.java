@@ -2,6 +2,9 @@ package io.github.mjcro.sda;
 
 import java.util.Objects;
 
+/**
+ * Simple statement implementation that has both query and placeholders.
+ */
 class StatementSimple implements Statement {
     private final String sql;
     private final Object[] placeholders;
@@ -11,7 +14,6 @@ class StatementSimple implements Statement {
         this.placeholders = Objects.requireNonNull(placeholders, "placeholders");
     }
 
-
     @Override
     public String getSql() {
         return sql;
@@ -20,5 +22,20 @@ class StatementSimple implements Statement {
     @Override
     public Object[] getPlaceholders() {
         return placeholders;
+    }
+
+    @Override
+    public int hashCode() {
+        return Statement.basicHashCode(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Statement && Statement.basicallyEquals(this, (Statement) obj);
+    }
+
+    @Override
+    public String toString() {
+        return this.sql;
     }
 }
