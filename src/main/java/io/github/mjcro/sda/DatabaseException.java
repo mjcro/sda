@@ -3,7 +3,7 @@ package io.github.mjcro.sda;
 import java.sql.SQLException;
 
 public class DatabaseException extends RuntimeException {
-    protected DatabaseException(String message) {
+    public DatabaseException(String message) {
         super(message);
     }
 
