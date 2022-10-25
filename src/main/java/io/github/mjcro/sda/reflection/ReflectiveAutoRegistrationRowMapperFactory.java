@@ -8,6 +8,7 @@ import io.github.mjcro.sda.RowMapper;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,13 +16,18 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+/**
+ * Row mapper factory that produces row mapper using reflection.
+ */
 public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFactory {
     private final FieldWriterProducer writerProducer;
 
-    public ReflectiveAutoRegistrationRowMapperFactory(FieldWriterProducer writerProducer) {
-        this.writerProducer = Objects.requireNonNull(writerProducer, "writerProducer");
-    }
-
+    /**
+     * Constructs row mapper factory with given field writer producers.
+     *
+     * @param others Field writer producers to use.
+     * @return Row mapper factory.
+     */
     public static BasicRowMapperFactory standard(FieldWriterProducer... others) {
         FieldWriterProducerSequentialList list = new FieldWriterProducerSequentialList(List.of(
                 new FieldWriterProducerByMapperAnnotation(),
@@ -38,17 +44,30 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
         return new ReflectiveAutoRegistrationRowMapperFactory(list);
     }
 
-    private List<Field> recursiveFields(Class<?> clazz) {
+    /**
+     * Recursively (over inheritance) iterates over all declared fields.
+     *
+     * @param clazz Class to start recursion from.
+     * @return Found fields.
+     */
+    static List<Field> recursiveFields(Class<?> clazz) {
         if (clazz == Object.class) {
             return List.of();
         }
 
         ArrayList<Field> fields = new ArrayList<>();
         for (Field field : clazz.getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
+                continue;
+            }
             fields.add(field);
         }
         fields.addAll(recursiveFields(clazz.getSuperclass()));
         return fields;
+    }
+
+    public ReflectiveAutoRegistrationRowMapperFactory(FieldWriterProducer writerProducer) {
+        this.writerProducer = Objects.requireNonNull(writerProducer, "writerProducer");
     }
 
     @Override
