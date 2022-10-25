@@ -31,8 +31,10 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
     public static BasicRowMapperFactory standard(FieldWriterProducer... others) {
         FieldWriterProducerSequentialList list = new FieldWriterProducerSequentialList(List.of(
                 new FieldWriterProducerByMapperAnnotation(),
+                new FieldWriterProducerByCreatorAnnotation(),
                 new FieldWriterProducerPrimitives(),
-                new FieldWriterProducerBoxedPrimitives()
+                new FieldWriterProducerBoxedPrimitives(),
+                new FieldWriterProducerUppercaseEnums()
         ));
 
         if (others != null && others.length > 0) {
