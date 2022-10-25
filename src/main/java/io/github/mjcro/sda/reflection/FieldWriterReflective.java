@@ -11,10 +11,10 @@ interface FieldWriterReflective<T> extends FieldWriter<T> {
     default void write(ResultSet from, T to) throws SQLException {
         try {
             write0(from, to);
-        } catch (IllegalAccessException e) {
+        } catch (ReflectiveOperationException e) {
             throw new SQLException(e);
         }
     }
 
-    void write0(ResultSet from, T to) throws SQLException, IllegalAccessException;
+    void write0(ResultSet from, T to) throws SQLException, ReflectiveOperationException;
 }
