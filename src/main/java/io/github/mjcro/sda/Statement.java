@@ -47,7 +47,7 @@ public interface Statement extends StatementPrototype {
             Collection<Object> identifiers
     ) {
         return dialect -> {
-            if (MySqlUtil.isCompatible(dialect)) {
+            if (dialect.isCompatibleWith(Dialect.MySQL)) {
                 return MySqlUtil.matchColumn(table, column, identifiers);
             }
             throw new UnsupportedDialectException(dialect);
@@ -72,7 +72,7 @@ public interface Statement extends StatementPrototype {
             Collection<Object> identifiersTwo
     ) {
         return dialect -> {
-            if (MySqlUtil.isCompatible(dialect)) {
+            if (dialect.isCompatibleWith(Dialect.MySQL)) {
                 return MySqlUtil.matchColumn(table, columnOne, identifiersOne, columnTwo, identifiersTwo);
             }
             throw new UnsupportedDialectException(dialect);
@@ -91,7 +91,7 @@ public interface Statement extends StatementPrototype {
             Map<String, Object> values
     ) {
         return dialect -> {
-            if (MySqlUtil.isCompatible(dialect)) {
+            if (dialect.isCompatibleWith(Dialect.MySQL)) {
                 return MySqlUtil.insert(table, values);
             }
             throw new UnsupportedDialectException(dialect);
