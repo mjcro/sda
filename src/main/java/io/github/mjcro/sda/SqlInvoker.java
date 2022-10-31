@@ -89,6 +89,49 @@ public interface SqlInvoker {
     }
 
     /**
+     * Fetches grouped values from database.
+     * Never returns null, if no data - returns empty map.
+     *
+     * @param clazz             Response item class.
+     * @param groupingKeyMapper Mapper to extract grouping key from object.
+     * @param sql               Query.
+     * @param placeholders      Placeholders for query.
+     * @param <K>               Map key type.
+     * @param <T>               Response item type.
+     * @return Map of items.
+     */
+    default <K, T> Map<K, List<T>> grouped(
+            Class<? extends T> clazz,
+            Function<? super T, ? extends K> groupingKeyMapper,
+            String sql,
+            Object[] placeholders
+    ) {
+        return this.list(clazz, sql, placeholders)
+                .stream()
+                .collect(Collectors.groupingBy(groupingKeyMapper));
+    }
+
+    /**
+     * Fetches grouped values from database.
+     * Never returns null, if no data - returns empty map.
+     *
+     * @param clazz             Response item class.
+     * @param groupingKeyMapper Mapper to extract grouping key from object.
+     * @param prototype         Statement containing query and placeholders.
+     * @param <K>               Map key type.
+     * @param <T>               Response item type.
+     * @return Map of items.
+     */
+    default <K, T> Map<K, List<T>> grouped(
+            Class<? extends T> clazz,
+            Function<? super T, ? extends K> groupingKeyMapper,
+            StatementPrototype prototype
+    ) {
+        Statement statement = prototype.createStatement(getDialect());
+        return this.grouped(clazz, groupingKeyMapper, statement.getSql(), statement.getPlaceholders());
+    }
+
+    /**
      * Fetches single item from database.
      * Never returns null, if no data - returns empty optional.
      *

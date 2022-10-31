@@ -4,8 +4,20 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.NClob;
+import java.sql.Ref;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.RowId;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Statement;
-import java.sql.*;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -163,11 +175,13 @@ public class VirtualResultSet implements ResultSet {
     }
 
     @Override
+    @Deprecated
     public BigDecimal getBigDecimal(int columnIndex, int scale) {
         throw new AssertionError("not implemented");
     }
 
     @Override
+    @Deprecated
     public BigDecimal getBigDecimal(String columnLabel, int scale) {
         throw new AssertionError("not implemented");
     }
@@ -203,6 +217,7 @@ public class VirtualResultSet implements ResultSet {
     }
 
     @Override
+    @Deprecated
     public InputStream getUnicodeStream(int columnIndex) {
         throw new AssertionError("not implemented");
     }
@@ -233,6 +248,7 @@ public class VirtualResultSet implements ResultSet {
     }
 
     @Override
+    @Deprecated
     public InputStream getUnicodeStream(String columnLabel) {
         throw new AssertionError("not implemented");
     }

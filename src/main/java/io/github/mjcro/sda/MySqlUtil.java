@@ -54,10 +54,6 @@ public class MySqlUtil {
         return "`" + name + "`";
     }
 
-    static boolean isCompatible(Dialect dialect) {
-        return dialect == Dialect.MySQL || dialect == Dialect.H2;
-    }
-
     static Statement matchColumn(
             String table,
             String column,
