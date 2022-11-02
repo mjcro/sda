@@ -17,16 +17,17 @@ public class FieldWriterProducerByCreatorAnnotation implements FieldWriterProduc
                 if (method.getParameterCount() != 1) {
                     throw new RuntimeException("Expected 1 argument");
                 }
+                method.setAccessible(true);
                 Class<?> parameterType = method.getParameterTypes()[0];
                 if (parameterType == String.class) {
-                    return Optional.of((FieldWriterReflective<Object>) (rs, to) -> field.set(to, method.invoke(rs.getString(columnName))));
+                    return Optional.of((FieldWriterReflective<Object>) (rs, to) -> field.set(to, method.invoke(null, rs.getString(columnName))));
                 } else if (parameterType == int.class) {
                     return Optional.of((FieldWriterReflective<Object>) (rs, to) -> {
-                        field.set(to, method.invoke(rs.getInt(columnName)));
+                        field.set(to, method.invoke(null, rs.getInt(columnName)));
                     });
                 } else if (parameterType == long.class) {
                     return Optional.of((FieldWriterReflective<Object>) (rs, to) -> {
-                        field.set(to, method.invoke(rs.getLong(columnName)));
+                        field.set(to, method.invoke(null, rs.getLong(columnName)));
                     });
                 } else if (parameterType == Long.class) {
                     return Optional.of((FieldWriterReflective<Object>) (rs, to) -> {
@@ -34,7 +35,7 @@ public class FieldWriterProducerByCreatorAnnotation implements FieldWriterProduc
                         if (rs.wasNull()) {
                             value = null;
                         }
-                        field.set(to, method.invoke(value));
+                        field.set(to, method.invoke(null, value));
                     });
                 } else if (parameterType == Integer.class) {
                     return Optional.of((FieldWriterReflective<Object>) (rs, to) -> {
@@ -42,7 +43,7 @@ public class FieldWriterProducerByCreatorAnnotation implements FieldWriterProduc
                         if (rs.wasNull()) {
                             value = null;
                         }
-                        field.set(to, method.invoke(value));
+                        field.set(to, method.invoke(null, value));
                     });
                 }
             }
