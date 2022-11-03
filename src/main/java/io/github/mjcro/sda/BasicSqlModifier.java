@@ -16,18 +16,15 @@ public class BasicSqlModifier extends BasicSqlInvoker implements SqlModifier {
      * @param dialect            Dialect, supported by this invoker.
      * @param connectionProvider Connection provider to use.
      * @param rowMapperFactory   Row mapper used to map rows to Java objects.
-     * @param placeholderMapper  Placeholder mapper used to map incoming placeholders before passing them
-     *                           to database. Optional.
      * @param sqlTracer          Component used to track SQL timings and errors. Optional.
      */
     public BasicSqlModifier(
             Dialect dialect,
             ConnectionProvider connectionProvider,
             RowMapperFactory rowMapperFactory,
-            PlaceholderMapper placeholderMapper,
             SqlTracer sqlTracer
     ) {
-        super(dialect, connectionProvider, rowMapperFactory, placeholderMapper, sqlTracer);
+        super(dialect, connectionProvider, rowMapperFactory, sqlTracer);
     }
 
     @Override

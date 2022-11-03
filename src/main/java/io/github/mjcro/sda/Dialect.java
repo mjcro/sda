@@ -20,4 +20,14 @@ public interface Dialect {
     default boolean isCompatibleWith(Dialect other) {
         return other == this;
     }
+
+    /**
+     * Prepares placeholder before using it in queries.
+     *
+     * @param value Placeholder value.
+     * @return Prepared value.
+     */
+    default Object preparePlaceholder(Object value) {
+        return value;
+    }
 }
