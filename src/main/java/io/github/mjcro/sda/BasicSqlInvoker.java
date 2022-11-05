@@ -16,7 +16,6 @@ public class BasicSqlInvoker implements SqlInvoker {
     private final Dialect dialect;
     protected final ConnectionProvider connectionProvider;
     protected final RowMapperFactory rowMapperFactory;
-    protected final PlaceholderMapper placeholderMapper;
     protected final SqlTracer sqlTracer;
 
     /**
@@ -25,23 +24,17 @@ public class BasicSqlInvoker implements SqlInvoker {
      * @param dialect            Dialect, supported by this invoker.
      * @param connectionProvider Connection provider to use.
      * @param rowMapperFactory   Row mapper used to map rows to Java objects.
-     * @param placeholderMapper  Placeholder mapper used to map incoming placeholders before passing them
-     *                           to database. Optional.
      * @param sqlTracer          Component used to track SQL timings and errors. Optional.
      */
     public BasicSqlInvoker(
             Dialect dialect,
             ConnectionProvider connectionProvider,
             RowMapperFactory rowMapperFactory,
-            PlaceholderMapper placeholderMapper,
             SqlTracer sqlTracer
     ) {
         this.dialect = Objects.requireNonNull(dialect, "dialect");
         this.connectionProvider = Objects.requireNonNull(connectionProvider, "connectionProvider");
         this.rowMapperFactory = Objects.requireNonNull(rowMapperFactory, "rowMapperFactory");
-        this.placeholderMapper = placeholderMapper == null
-                ? value -> value
-                : placeholderMapper;
         this.sqlTracer = sqlTracer == null
                 ? (sql, placeholders, elapsed, error) -> {
         }
@@ -73,7 +66,7 @@ public class BasicSqlInvoker implements SqlInvoker {
     protected void prepareAndSet(PreparedStatement statement, Object[] placeholders) throws SQLException {
         if (placeholders != null && placeholders.length > 0) {
             for (int i = 0; i < placeholders.length; i++) {
-                statement.setObject(i + 1, placeholderMapper.map(placeholders[i]));
+                statement.setObject(i + 1, getDialect().preparePlaceholder(placeholders[i]));
             }
         }
     }

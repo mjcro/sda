@@ -32,4 +32,14 @@ public interface Dialect {
     default DatabaseException convertException(SQLException source) {
         return new DatabaseException(source);
     }
+
+    /**
+     * Prepares placeholder before using it in queries.
+     *
+     * @param value Placeholder value.
+     * @return Prepared value.
+     */
+    default Object preparePlaceholder(Object value) {
+        return value;
+    }
 }
