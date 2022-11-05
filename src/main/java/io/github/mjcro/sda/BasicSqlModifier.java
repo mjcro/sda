@@ -49,8 +49,9 @@ public class BasicSqlModifier extends BasicSqlInvoker implements SqlModifier {
                 return OptionalLong.of(affected);
             }
         } catch (SQLException e) {
-            finishSqlTraceNano(sql, placeholders, nano, e);
-            throw new DatabaseException(e);
+            DatabaseException converted = getDialect().convertException(e);
+            finishSqlTraceNano(sql, placeholders, nano, converted);
+            throw converted;
         }
     }
 }

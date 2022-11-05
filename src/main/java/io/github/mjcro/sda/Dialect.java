@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import java.sql.SQLException;
+
 /**
  * Defines database dialect.
  * Used in {@link StatementPrototype} to generate statements;
@@ -19,5 +21,15 @@ public interface Dialect {
      */
     default boolean isCompatibleWith(Dialect other) {
         return other == this;
+    }
+
+    /**
+     * Converts exception into compatible.
+     *
+     * @param source Source exception.
+     * @return Resulting exception.
+     */
+    default DatabaseException convertException(SQLException source) {
+        return new DatabaseException(source);
     }
 }

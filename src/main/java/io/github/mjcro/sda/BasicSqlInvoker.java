@@ -123,8 +123,9 @@ public class BasicSqlInvoker implements SqlInvoker {
                 }
             }
         } catch (SQLException e) {
-            finishSqlTraceNano(sql, placeholders, nano, e);
-            throw new DatabaseException(e);
+            DatabaseException converted = getDialect().convertException(e);
+            finishSqlTraceNano(sql, placeholders, nano, converted);
+            throw converted;
         }
     }
 }
