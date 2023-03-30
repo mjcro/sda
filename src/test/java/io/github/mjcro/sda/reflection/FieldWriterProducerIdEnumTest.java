@@ -1,6 +1,6 @@
 package io.github.mjcro.sda.reflection;
 
-import io.github.mjcro.references.longs.IdReference;
+import io.github.mjcro.interfaces.ints.WithId;
 import io.github.mjcro.sda.FieldWriter;
 import io.github.mjcro.sda.VirtualResultSet;
 import org.testng.Assert;
@@ -42,19 +42,19 @@ public class FieldWriterProducerIdEnumTest {
         public UserType userType;
     }
 
-    private enum UserType implements IdReference {
+    private enum UserType implements WithId {
         ADMIN(2),
         USER(1),
         ANONYMOUS(0);
 
-        UserType(long id) {
+        UserType(int id) {
             this.id = id;
         }
 
-        private final long id;
+        private final int id;
 
         @Override
-        public long getId() {
+        public int getId() {
             return id;
         }
     }
