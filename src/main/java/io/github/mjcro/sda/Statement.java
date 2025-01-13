@@ -8,16 +8,16 @@ import java.util.function.BiConsumer;
 
 public interface Statement extends StatementPrototype {
     /**
-     * Constructs new statement instance for given query and placeholders.
+     * Constructs new statement instance for given query and parameters.
      *
-     * @param sql          Query.
-     * @param placeholders Placeholders.
+     * @param sql        Query.
+     * @param parameters Parameters.
      * @return Statement.
      */
-    static Statement of(String sql, Object[] placeholders) {
-        return placeholders == null || placeholders.length == 0
+    static Statement of(String sql, Object[] parameters) {
+        return parameters == null || parameters.length == 0
                 ? new StatementQueryOnly(sql)
-                : new StatementSimple(sql, placeholders);
+                : new StatementSimple(sql, parameters);
     }
 
     /**
@@ -28,9 +28,9 @@ public interface Statement extends StatementPrototype {
      */
     static Statement build(BiConsumer<StringBuilder, ArrayList<Object>> builder) {
         StringBuilder stringBuilder = new StringBuilder();
-        ArrayList<Object> placeholders = new ArrayList<>();
-        builder.accept(stringBuilder, placeholders);
-        return of(stringBuilder.toString(), placeholders.toArray());
+        ArrayList<Object> parameters = new ArrayList<>();
+        builder.accept(stringBuilder, parameters);
+        return of(stringBuilder.toString(), parameters.toArray());
     }
 
     /**
@@ -99,11 +99,11 @@ public interface Statement extends StatementPrototype {
     }
 
     /**
-     * Returns true if both statements has same query and placeholders.
+     * Returns true if both statements has same query and parameters.
      *
      * @param a First statement.
      * @param b Second statement.
-     * @return True if statements has same query and placeholder.
+     * @return True if statements has same query and parameters.
      */
     static boolean basicallyEquals(Statement a, Statement b) {
         if (a == null || b == null) {
@@ -114,7 +114,7 @@ public interface Statement extends StatementPrototype {
             return false; // SQL differs
         }
 
-        return Arrays.equals(a.getPlaceholders(), b.getPlaceholders());
+        return Arrays.equals(a.getParameters(), b.getParameters());
     }
 
     /**
@@ -138,7 +138,7 @@ public interface Statement extends StatementPrototype {
     String getSql();
 
     /**
-     * @return Statement placeholders.
+     * @return Statement parameters.
      */
-    Object[] getPlaceholders();
+    Object[] getParameters();
 }

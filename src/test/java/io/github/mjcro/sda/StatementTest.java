@@ -12,22 +12,22 @@ public class StatementTest {
         Statement statement = Statement.of("Foo", null);
         Assert.assertTrue(statement instanceof StatementQueryOnly);
         Assert.assertEquals(statement.getSql(), "Foo");
-        Assert.assertNotNull(statement.getPlaceholders());
-        Assert.assertEquals(statement.getPlaceholders().length, 0);
+        Assert.assertNotNull(statement.getParameters());
+        Assert.assertEquals(statement.getParameters().length, 0);
 
         statement = Statement.of("Bar", new Object[]{});
         Assert.assertTrue(statement instanceof StatementQueryOnly);
         Assert.assertEquals(statement.getSql(), "Bar");
-        Assert.assertNotNull(statement.getPlaceholders());
-        Assert.assertEquals(statement.getPlaceholders().length, 0);
+        Assert.assertNotNull(statement.getParameters());
+        Assert.assertEquals(statement.getParameters().length, 0);
 
         statement = Statement.of("Baz", new Object[]{2L, "xxx"});
         Assert.assertTrue(statement instanceof StatementSimple);
         Assert.assertEquals(statement.getSql(), "Baz");
-        Assert.assertNotNull(statement.getPlaceholders());
-        Assert.assertEquals(statement.getPlaceholders().length, 2);
-        Assert.assertEquals(statement.getPlaceholders()[0], 2L);
-        Assert.assertEquals(statement.getPlaceholders()[1], "xxx");
+        Assert.assertNotNull(statement.getParameters());
+        Assert.assertEquals(statement.getParameters().length, 2);
+        Assert.assertEquals(statement.getParameters()[0], 2L);
+        Assert.assertEquals(statement.getParameters()[1], "xxx");
     }
 
     @Test(dependsOnMethods = "testOf")
@@ -36,15 +36,15 @@ public class StatementTest {
                 .createStatement(Dialect.MySQL);
 
         Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `id` IN (?,?,?)");
-        Assert.assertEquals(statement.getPlaceholders()[0], 3);
-        Assert.assertEquals(statement.getPlaceholders()[1], 4);
-        Assert.assertEquals(statement.getPlaceholders()[2], 5);
+        Assert.assertEquals(statement.getParameters()[0], 3);
+        Assert.assertEquals(statement.getParameters()[1], 4);
+        Assert.assertEquals(statement.getParameters()[2], 5);
 
         statement = Statement.matchColumn("content", "enabled", List.of(false))
                 .createStatement(Dialect.MySQL);
 
         Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `enabled` = ?");
-        Assert.assertEquals(statement.getPlaceholders()[0], false);
+        Assert.assertEquals(statement.getParameters()[0], false);
     }
 
     @Test(dependsOnMethods = "testOf")
@@ -53,10 +53,10 @@ public class StatementTest {
                 .createStatement(Dialect.MySQL);
 
         Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `id` IN (?,?,?) AND `enabled` = ?");
-        Assert.assertEquals(statement.getPlaceholders()[0], 3);
-        Assert.assertEquals(statement.getPlaceholders()[1], 4);
-        Assert.assertEquals(statement.getPlaceholders()[2], 5);
-        Assert.assertEquals(statement.getPlaceholders()[3], true);
+        Assert.assertEquals(statement.getParameters()[0], 3);
+        Assert.assertEquals(statement.getParameters()[1], 4);
+        Assert.assertEquals(statement.getParameters()[2], 5);
+        Assert.assertEquals(statement.getParameters()[3], true);
     }
 
     @Test(dependsOnMethods = "testOf")
@@ -69,8 +69,8 @@ public class StatementTest {
                 .createStatement(Dialect.MySQL);
 
         Assert.assertEquals(statement.getSql(), "INSERT INTO `fooTable` (`id`,`name`) VALUES (?,?)");
-        Assert.assertEquals(statement.getPlaceholders()[0], 33L);
-        Assert.assertEquals(statement.getPlaceholders()[1], "Fooer");
+        Assert.assertEquals(statement.getParameters()[0], 33L);
+        Assert.assertEquals(statement.getParameters()[1], "Fooer");
     }
 
     @Test

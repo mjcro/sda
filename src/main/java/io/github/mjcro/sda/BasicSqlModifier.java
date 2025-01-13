@@ -28,26 +28,26 @@ public class BasicSqlModifier extends BasicSqlInvoker implements SqlModifier {
     }
 
     @Override
-    public OptionalLong modify(String sql, Object[] placeholders) {
+    public OptionalLong modify(String sql, Object[] parameters) {
         long nano = System.nanoTime();
         try (Connection connection = getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
-                prepareAndSet(preparedStatement, placeholders);
+                prepareAndSet(preparedStatement, parameters);
 
                 int affected = preparedStatement.executeUpdate();
                 try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                     if (generatedKeys != null && generatedKeys.isBeforeFirst()) {
                         generatedKeys.next();
-                        finishSqlTraceNano(sql, placeholders, nano, null);
+                        finishSqlTraceNano(sql, parameters, nano, null);
                         return OptionalLong.of(generatedKeys.getLong(1));
                     }
                 }
-                finishSqlTraceNano(sql, placeholders, nano, null);
+                finishSqlTraceNano(sql, parameters, nano, null);
                 return OptionalLong.of(affected);
             }
         } catch (SQLException e) {
             DatabaseException converted = getDialect().convertException(e);
-            finishSqlTraceNano(sql, placeholders, nano, converted);
+            finishSqlTraceNano(sql, parameters, nano, converted);
             throw converted;
         }
     }

@@ -36,7 +36,7 @@ public class BasicSqlInvoker implements SqlInvoker {
         this.connectionProvider = Objects.requireNonNull(connectionProvider, "connectionProvider");
         this.rowMapperFactory = Objects.requireNonNull(rowMapperFactory, "rowMapperFactory");
         this.sqlTracer = sqlTracer == null
-                ? (sql, placeholders, elapsed, error) -> {
+                ? (sql, parameters, elapsed, error) -> {
         }
                 : sqlTracer;
     }
@@ -57,16 +57,16 @@ public class BasicSqlInvoker implements SqlInvoker {
     }
 
     /**
-     * Prepares and sets placeholder values to given statement.
+     * Prepares and sets parameters values to given statement.
      *
-     * @param statement    Statement to set data into.
-     * @param placeholders Values to set.
+     * @param statement  Statement to set data into.
+     * @param parameters Values to set.
      * @throws SQLException On statement error.
      */
-    protected void prepareAndSet(PreparedStatement statement, Object[] placeholders) throws SQLException {
-        if (placeholders != null && placeholders.length > 0) {
-            for (int i = 0; i < placeholders.length; i++) {
-                statement.setObject(i + 1, getDialect().preparePlaceholder(placeholders[i]));
+    protected void prepareAndSet(PreparedStatement statement, Object[] parameters) throws SQLException {
+        if (parameters != null && parameters.length > 0) {
+            for (int i = 0; i < parameters.length; i++) {
+                statement.setObject(i + 1, getDialect().prepareParameters(parameters[i]));
             }
         }
     }
@@ -74,29 +74,29 @@ public class BasicSqlInvoker implements SqlInvoker {
     /**
      * Tracks finish of SQL query invocation.
      *
-     * @param sql          SQL query.
-     * @param placeholders Placeholders.
-     * @param startNano    Nano time when query processing started.
-     * @param error        Exception, optional.
+     * @param sql        SQL query.
+     * @param parameters Parameters.
+     * @param startNano  Nano time when query processing started.
+     * @param error      Exception, optional.
      */
     protected void finishSqlTraceNano(
             String sql,
-            Object[] placeholders,
+            Object[] parameters,
             long startNano,
             Exception error
     ) {
-        sqlTracer.trace(sql, placeholders, Duration.ofNanos(System.nanoTime() - startNano), error);
+        sqlTracer.trace(sql, parameters, Duration.ofNanos(System.nanoTime() - startNano), error);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> list(Class<? extends T> clazz, String sql, Object[] placeholders) {
+    public <T> List<T> list(Class<? extends T> clazz, String sql, Object[] parameters) {
         RowMapper<T> rowMapper = (RowMapper<T>) rowMapperFactory.get(clazz);
 
         long nano = System.nanoTime();
         try (Connection connection = getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                prepareAndSet(preparedStatement, placeholders);
+                prepareAndSet(preparedStatement, parameters);
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (!resultSet.isBeforeFirst()) {
@@ -111,13 +111,13 @@ public class BasicSqlInvoker implements SqlInvoker {
                         list.add(rowMapper.mapRow(resultSet));
                     }
 
-                    finishSqlTraceNano(sql, placeholders, nano, null);
+                    finishSqlTraceNano(sql, parameters, nano, null);
                     return list;
                 }
             }
         } catch (SQLException e) {
             DatabaseException converted = getDialect().convertException(e);
-            finishSqlTraceNano(sql, placeholders, nano, converted);
+            finishSqlTraceNano(sql, parameters, nano, converted);
             throw converted;
         }
     }

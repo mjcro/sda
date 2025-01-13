@@ -3,15 +3,15 @@ package io.github.mjcro.sda;
 import java.util.Objects;
 
 /**
- * Simple statement implementation that has both query and placeholders.
+ * Simple statement implementation that has both query and parameters.
  */
 class StatementSimple implements Statement {
     private final String sql;
-    private final Object[] placeholders;
+    private final Object[] parameters;
 
-    StatementSimple(String sql, Object[] placeholders) {
+    StatementSimple(String sql, Object[] parameters) {
         this.sql = Objects.requireNonNull(sql, "sql");
-        this.placeholders = Objects.requireNonNull(placeholders, "placeholders");
+        this.parameters = Objects.requireNonNull(parameters, "parameters");
     }
 
     @Override
@@ -20,8 +20,8 @@ class StatementSimple implements Statement {
     }
 
     @Override
-    public Object[] getPlaceholders() {
-        return placeholders;
+    public Object[] getParameters() {
+        return parameters;
     }
 
     @Override

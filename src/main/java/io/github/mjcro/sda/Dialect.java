@@ -34,12 +34,12 @@ public interface Dialect {
     }
 
     /**
-     * Prepares placeholder before using it in queries.
+     * Prepares parameter before using it in queries.
      *
-     * @param value Placeholder value.
+     * @param value Parameter value.
      * @return Prepared value.
      */
-    default Object preparePlaceholder(Object value) {
+    default Object prepareParameters(Object value) {
         return value;
     }
 }

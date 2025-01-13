@@ -10,20 +10,20 @@ public interface SqlModifier extends SqlInvoker {
     /**
      * Performs data modification request (INSERT, UPDATE, DELETE, etc...).
      *
-     * @param sql          SQL.
-     * @param placeholders Placeholders.
+     * @param sql        SQL.
+     * @param parameters Parameters.
      * @return Identifier of inserted data or number of affected rows.
      */
-    OptionalLong modify(String sql, Object[] placeholders);
+    OptionalLong modify(String sql, Object[] parameters);
 
     /**
      * Performs modification request (INSERT, UPDATE, DELETE, etc...).
      *
-     * @param prototype Statement containing query and placeholders.
+     * @param prototype Statement containing query and parameters.
      * @return Identifier of inserted data or number of affected rows.
      */
     default OptionalLong modify(StatementPrototype prototype) {
         Statement statement = prototype.createStatement(getDialect());
-        return modify(statement.getSql(), statement.getPlaceholders());
+        return modify(statement.getSql(), statement.getParameters());
     }
 }

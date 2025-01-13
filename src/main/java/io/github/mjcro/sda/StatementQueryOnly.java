@@ -4,10 +4,10 @@ import java.util.Objects;
 
 /**
  * Simple statement implementation that contains SQL query only
- * and no placeholders.
+ * and no parameters.
  */
 class StatementQueryOnly implements Statement {
-    private static final Object[] placeholders = new Object[0];
+    private static final Object[] parameters = new Object[0];
     private final String sql;
 
     StatementQueryOnly(String sql) {
@@ -20,8 +20,8 @@ class StatementQueryOnly implements Statement {
     }
 
     @Override
-    public Object[] getPlaceholders() {
-        return placeholders;
+    public Object[] getParameters() {
+        return parameters;
     }
 
     @Override
