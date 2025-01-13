@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import io.github.mjcro.interfaces.database.Statement;
+
 @FunctionalInterface
 public interface StatementPrototype {
     /**

@@ -2,7 +2,7 @@ package io.github.mjcro.sda.prefab;
 
 import io.github.mjcro.sda.SqlInvoker;
 import io.github.mjcro.sda.SqlModifier;
-import io.github.mjcro.sda.Statement;
+import io.github.mjcro.sda.Statements;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -57,7 +57,11 @@ public class AbstractSqlLongIdRepository<T> extends AbstractSqlSingleEntityRepos
 
         return getSqlInvoker().list(
                 getEntityClass(),
-                Statement.matchColumn(getTableName(), "id", Arrays.stream(ids).boxed().collect(Collectors.toSet()))
+                Statements.matchColumn(
+                        getTableName(),
+                        "id",
+                        Arrays.stream(ids).boxed().collect(Collectors.toSet())
+                )
         );
     }
 }

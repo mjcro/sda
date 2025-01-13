@@ -6,7 +6,7 @@
 
     <groupId>io.github.mjcro</groupId>
     <artifactId>sda</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>MicroJ Simple Database Adapter</name>
     <description>Tiny library with simple wrappers to database</description>
@@ -106,13 +106,13 @@
         <dependency>
             <groupId>io.github.mjcro</groupId>
             <artifactId>interfaces</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.21</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.3.26</version>
+            <version>5.3.39</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

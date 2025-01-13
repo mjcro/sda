@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import io.github.mjcro.interfaces.database.Statement;
+
 import java.util.OptionalLong;
 
 /**
@@ -23,7 +25,16 @@ public interface SqlModifier extends SqlInvoker {
      * @return Identifier of inserted data or number of affected rows.
      */
     default OptionalLong modify(StatementPrototype prototype) {
-        Statement statement = prototype.createStatement(getDialect());
+        return modify(prototype.createStatement(getDialect()));
+    }
+
+    /**
+     * Performs modification request (INSERT, UPDATE, DELETE, etc...).
+     *
+     * @param statement Statement containing query and parameters.
+     * @return Identifier of inserted data or number of affected rows.
+     */
+    default OptionalLong modify(Statement statement) {
         return modify(statement.getSql(), statement.getParameters());
     }
 }

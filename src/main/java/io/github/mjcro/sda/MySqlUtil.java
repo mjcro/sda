@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import io.github.mjcro.interfaces.database.Statement;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -63,7 +65,7 @@ public class MySqlUtil {
         Objects.requireNonNull(column, "column");
         Objects.requireNonNull(identifiers, "identifiers");
 
-        return Statement.build((sb, ph) -> {
+        return Statements.build((sb, ph) -> {
             sb.append("SELECT * FROM ").append(name(table)).append(" WHERE ").append(name(column));
             writeEqOrIn(sb, identifiers);
             ph.addAll(identifiers);
@@ -83,7 +85,7 @@ public class MySqlUtil {
         Objects.requireNonNull(identifiersOne, "identifiersOne");
         Objects.requireNonNull(identifiersTwo, "identifiersTwo");
 
-        return Statement.build((sb, ph) -> {
+        return Statements.build((sb, ph) -> {
             sb.append("SELECT * FROM ").append(name(table)).append(" WHERE ");
 
             sb.append(name(columnOne));
@@ -103,7 +105,7 @@ public class MySqlUtil {
         Objects.requireNonNull(table, "table");
         Objects.requireNonNull(values, "values");
 
-        return Statement.build((sb, ph) -> {
+        return Statements.build((sb, ph) -> {
             sb.append("INSERT INTO ").append(name(table)).append(" (");
             boolean first = true;
             for (Map.Entry<String, Object> entry : values.entrySet()) {

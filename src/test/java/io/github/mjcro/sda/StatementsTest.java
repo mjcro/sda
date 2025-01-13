@@ -1,27 +1,28 @@
 package io.github.mjcro.sda;
 
+import io.github.mjcro.interfaces.database.Statement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class StatementTest {
+public class StatementsTest {
     @Test
     public void testOf() {
-        Statement statement = Statement.of("Foo", null);
+        Statement statement = Statements.of("Foo", null);
         Assert.assertTrue(statement instanceof StatementQueryOnly);
         Assert.assertEquals(statement.getSql(), "Foo");
         Assert.assertNotNull(statement.getParameters());
         Assert.assertEquals(statement.getParameters().length, 0);
 
-        statement = Statement.of("Bar", new Object[]{});
+        statement = Statements.of("Bar", new Object[]{});
         Assert.assertTrue(statement instanceof StatementQueryOnly);
         Assert.assertEquals(statement.getSql(), "Bar");
         Assert.assertNotNull(statement.getParameters());
         Assert.assertEquals(statement.getParameters().length, 0);
 
-        statement = Statement.of("Baz", new Object[]{2L, "xxx"});
+        statement = Statements.of("Baz", new Object[]{2L, "xxx"});
         Assert.assertTrue(statement instanceof StatementSimple);
         Assert.assertEquals(statement.getSql(), "Baz");
         Assert.assertNotNull(statement.getParameters());
@@ -32,7 +33,7 @@ public class StatementTest {
 
     @Test(dependsOnMethods = "testOf")
     public void testMatchColumnMySQL() {
-        Statement statement = Statement.matchColumn("content", "id", List.of(3, 4, 5))
+        Statement statement = Statements.matchColumn("content", "id", List.of(3, 4, 5))
                 .createStatement(Dialect.MySQL);
 
         Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `id` IN (?,?,?)");
@@ -40,7 +41,7 @@ public class StatementTest {
         Assert.assertEquals(statement.getParameters()[1], 4);
         Assert.assertEquals(statement.getParameters()[2], 5);
 
-        statement = Statement.matchColumn("content", "enabled", List.of(false))
+        statement = Statements.matchColumn("content", "enabled", List.of(false))
                 .createStatement(Dialect.MySQL);
 
         Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `enabled` = ?");
@@ -49,7 +50,7 @@ public class StatementTest {
 
     @Test(dependsOnMethods = "testOf")
     public void testMatchColumn2MySQL() {
-        Statement statement = Statement.matchColumn("content", "id", List.of(3, 4, 5), "enabled", List.of(true))
+        Statement statement = Statements.matchColumn("content", "id", List.of(3, 4, 5), "enabled", List.of(true))
                 .createStatement(Dialect.MySQL);
 
         Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `id` IN (?,?,?) AND `enabled` = ?");
@@ -65,7 +66,7 @@ public class StatementTest {
         values.put("id", 33L);
         values.put("name", "Fooer");
 
-        Statement statement = Statement.insert("fooTable", values)
+        Statement statement = Statements.insert("fooTable", values)
                 .createStatement(Dialect.MySQL);
 
         Assert.assertEquals(statement.getSql(), "INSERT INTO `fooTable` (`id`,`name`) VALUES (?,?)");

@@ -1,12 +1,14 @@
 package io.github.mjcro.sda;
 
+import io.github.mjcro.interfaces.database.Statement;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public interface Statement extends StatementPrototype {
+public class Statements {
     /**
      * Constructs new statement instance for given query and parameters.
      *
@@ -41,7 +43,7 @@ public interface Statement extends StatementPrototype {
      * @param identifiers Column identifiers.
      * @return Statement prototype.
      */
-    static StatementPrototype matchColumn(
+    public static StatementPrototype matchColumn(
             String table,
             String column,
             Collection<Object> identifiers
@@ -64,7 +66,7 @@ public interface Statement extends StatementPrototype {
      * @param identifiersTwo Column identifiers.
      * @return Statement prototype.
      */
-    static StatementPrototype matchColumn(
+    public static StatementPrototype matchColumn(
             String table,
             String columnOne,
             Collection<Object> identifiersOne,
@@ -86,7 +88,7 @@ public interface Statement extends StatementPrototype {
      * @param values Values to insert.
      * @return Statement prototype.
      */
-    static StatementPrototype insert(
+    public static StatementPrototype insert(
             String table,
             Map<String, Object> values
     ) {
@@ -105,7 +107,7 @@ public interface Statement extends StatementPrototype {
      * @param b Second statement.
      * @return True if statements has same query and parameters.
      */
-    static boolean basicallyEquals(Statement a, Statement b) {
+    public static boolean basicallyEquals(Statement a, Statement b) {
         if (a == null || b == null) {
             return false; // If any of statements is null they are not equal.
         }
@@ -123,22 +125,10 @@ public interface Statement extends StatementPrototype {
      * @param s Statement to calculate hash for.
      * @return Calculated hash code.
      */
-    static int basicHashCode(Statement s) {
+    public static int basicHashCode(Statement s) {
         return s == null ? 0 : s.getSql().hashCode();
     }
 
-    @Override
-    default Statement createStatement(Dialect dialect) {
-        return this;
+    private Statements() {
     }
-
-    /**
-     * @return Statement query.
-     */
-    String getSql();
-
-    /**
-     * @return Statement parameters.
-     */
-    Object[] getParameters();
 }

@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import io.github.mjcro.interfaces.database.Statement;
+
 import java.util.Objects;
 
 /**
@@ -26,12 +28,12 @@ class StatementQueryOnly implements Statement {
 
     @Override
     public int hashCode() {
-        return Statement.basicHashCode(this);
+        return Statements.basicHashCode(this);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Statement && Statement.basicallyEquals(this, (Statement) obj);
+        return obj instanceof Statement && Statements.basicallyEquals(this, (Statement) obj);
     }
 
     @Override
