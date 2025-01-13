@@ -16,7 +16,7 @@ public class Statements {
      * @param parameters Parameters.
      * @return Statement.
      */
-    static Statement of(String sql, Object[] parameters) {
+    public static Statement of(String sql, Object[] parameters) {
         return parameters == null || parameters.length == 0
                 ? new StatementQueryOnly(sql)
                 : new StatementSimple(sql, parameters);
@@ -28,7 +28,7 @@ public class Statements {
      * @param builder Builder function.
      * @return Statement.
      */
-    static Statement build(BiConsumer<StringBuilder, ArrayList<Object>> builder) {
+    public static Statement build(BiConsumer<StringBuilder, ArrayList<Object>> builder) {
         StringBuilder stringBuilder = new StringBuilder();
         ArrayList<Object> parameters = new ArrayList<>();
         builder.accept(stringBuilder, parameters);
