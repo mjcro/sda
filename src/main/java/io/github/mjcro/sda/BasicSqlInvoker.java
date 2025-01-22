@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import io.github.mjcro.interfaces.sql.ConnectionProvider;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import io.github.mjcro.interfaces.sql.ConnectionProvider;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;

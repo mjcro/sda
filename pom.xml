@@ -6,7 +6,7 @@
 
     <groupId>io.github.mjcro</groupId>
     <artifactId>sda</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <name>MicroJ Simple Database Adapter</name>
     <description>Tiny library with simple wrappers to database</description>

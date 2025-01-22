@@ -1,9 +1,9 @@
 package io.github.mjcro.sda.spring;
 
+import io.github.mjcro.interfaces.sql.ConnectionProvider;
 import io.github.mjcro.sda.BasicSqlInvoker;
 import io.github.mjcro.sda.BasicSqlModifier;
 import io.github.mjcro.sda.CommonClassesRowMapperFactoryAdapter;
-import io.github.mjcro.sda.ConnectionProvider;
 import io.github.mjcro.sda.DataSourceConnectionProvider;
 import io.github.mjcro.sda.Dialect;
 import io.github.mjcro.sda.RowMapperFactory;
