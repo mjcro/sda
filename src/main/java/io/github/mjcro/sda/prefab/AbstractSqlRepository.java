@@ -1,6 +1,7 @@
 package io.github.mjcro.sda.prefab;
 
 import io.github.mjcro.sda.DatabaseException;
+import io.github.mjcro.sda.SourceWither;
 import io.github.mjcro.sda.SqlInvoker;
 import io.github.mjcro.sda.SqlModifier;
 
@@ -56,7 +57,9 @@ public abstract class AbstractSqlRepository {
      * @return SQL invoker.
      */
     protected SqlInvoker getSqlInvoker() {
-        return sqlInvoker;
+        return sqlInvoker instanceof SourceWither<?>
+                ? (SqlInvoker) ((SourceWither<?>) sqlInvoker).withSource(this)
+                : sqlInvoker;
     }
 
     /**
@@ -66,6 +69,8 @@ public abstract class AbstractSqlRepository {
         if (sqlModifier == null) {
             throw new DatabaseException("no SQL modifier configured for " + getClass().getName());
         }
-        return sqlModifier;
+        return sqlModifier instanceof SourceWither<?>
+                ? (SqlModifier) ((SourceWither<?>) sqlModifier).withSource(this)
+                : sqlModifier;
     }
 }

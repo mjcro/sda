@@ -48,7 +48,7 @@ public class SimpleDatabaseAccessConfiguration {
 
     @Bean
     public SqlTracer sqlTracer() {
-        return (sql, parameters, elapsed, error) -> {
+        return (source, sql, parameters, elapsed, error) -> {
         };
     }
 

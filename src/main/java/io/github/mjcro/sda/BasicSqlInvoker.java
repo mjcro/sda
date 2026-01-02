@@ -14,14 +14,15 @@ import java.util.Objects;
 /**
  * Basic implementation of {@link SqlInvoker}.
  */
-public class BasicSqlInvoker implements SqlInvoker {
+public class BasicSqlInvoker implements SqlInvoker, SourceWither<SqlInvoker> {
+    private final Object source;
     private final Dialect dialect;
     protected final ConnectionProvider connectionProvider;
     protected final RowMapperFactory rowMapperFactory;
     protected final SqlTracer sqlTracer;
 
     /**
-     * Main constructor.
+     * Constructor.
      *
      * @param dialect            Dialect, supported by this invoker.
      * @param connectionProvider Connection provider to use.
@@ -34,18 +35,46 @@ public class BasicSqlInvoker implements SqlInvoker {
             RowMapperFactory rowMapperFactory,
             SqlTracer sqlTracer
     ) {
+        this(null, dialect, connectionProvider, rowMapperFactory, sqlTracer);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param source             Trace source, repository object in most cases.
+     * @param dialect            Dialect, supported by this invoker.
+     * @param connectionProvider Connection provider to use.
+     * @param rowMapperFactory   Row mapper used to map rows to Java objects.
+     * @param sqlTracer          Component used to track SQL timings and errors. Optional.
+     */
+    BasicSqlInvoker(
+            Object source,
+            Dialect dialect,
+            ConnectionProvider connectionProvider,
+            RowMapperFactory rowMapperFactory,
+            SqlTracer sqlTracer
+    ) {
         this.dialect = Objects.requireNonNull(dialect, "dialect");
+        this.source = source == null ? this : source;
         this.connectionProvider = Objects.requireNonNull(connectionProvider, "connectionProvider");
         this.rowMapperFactory = Objects.requireNonNull(rowMapperFactory, "rowMapperFactory");
         this.sqlTracer = sqlTracer == null
-                ? (sql, parameters, elapsed, error) -> {
+                ? (src, sql, parameters, elapsed, error) -> {
         }
                 : sqlTracer;
     }
 
+
     @Override
     public Dialect getDialect() {
         return dialect;
+    }
+
+    @Override
+    public BasicSqlInvoker withSource(Object source) {
+        return this == source
+                ? this
+                : new BasicSqlInvoker(source, dialect, connectionProvider, rowMapperFactory, sqlTracer);
     }
 
     /**
@@ -87,7 +116,7 @@ public class BasicSqlInvoker implements SqlInvoker {
             long startNano,
             Exception error
     ) {
-        sqlTracer.trace(sql, parameters, Duration.ofNanos(System.nanoTime() - startNano), error);
+        sqlTracer.trace(source, sql, parameters, Duration.ofNanos(System.nanoTime() - startNano), error);
     }
 
     @SuppressWarnings("unchecked")
