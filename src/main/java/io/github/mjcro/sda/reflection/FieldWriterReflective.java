@@ -1,6 +1,7 @@
 package io.github.mjcro.sda.reflection;
 
 import io.github.mjcro.sda.FieldWriter;
+import org.jspecify.annotations.NonNull;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +9,7 @@ import java.sql.SQLException;
 @FunctionalInterface
 interface FieldWriterReflective<T> extends FieldWriter<T> {
     @Override
-    default void write(ResultSet from, T to) throws SQLException {
+    default void write(@NonNull ResultSet from, @NonNull T to) throws SQLException {
         try {
             write0(from, to);
         } catch (ReflectiveOperationException e) {
@@ -16,5 +17,5 @@ interface FieldWriterReflective<T> extends FieldWriter<T> {
         }
     }
 
-    void write0(ResultSet from, T to) throws SQLException, ReflectiveOperationException;
+    void write0(@NonNull ResultSet from, @NonNull T to) throws SQLException, ReflectiveOperationException;
 }

@@ -1,6 +1,7 @@
 package io.github.mjcro.sda.reflection;
 
 import io.github.mjcro.sda.Creator;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -8,7 +9,7 @@ import java.util.Optional;
 
 public class FieldWriterProducerByCreatorAnnotation extends AbstractClassCachingProducer {
     @Override
-    public boolean isSupported(Class<?> clazz) {
+    public boolean isSupported(@NonNull Class<?> clazz) {
         for (Method method : clazz.getDeclaredMethods()) {
             if (Modifier.isStatic(method.getModifiers()) && method.isAnnotationPresent(Creator.class)) {
                 return true;
@@ -18,7 +19,7 @@ public class FieldWriterProducerByCreatorAnnotation extends AbstractClassCaching
     }
 
     @Override
-    public FieldWriterProducer initializeCache(Class<?> clazz) {
+    public @NonNull FieldWriterProducer initializeCache(@NonNull Class<?> clazz) {
         for (Method method : clazz.getDeclaredMethods()) {
             if (Modifier.isStatic(method.getModifiers()) && method.isAnnotationPresent(Creator.class)) {
                 if (method.getParameterCount() != 1) {

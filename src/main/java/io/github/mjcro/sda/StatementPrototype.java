@@ -1,6 +1,7 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
+import org.jspecify.annotations.NonNull;
 
 @FunctionalInterface
 public interface StatementPrototype {
@@ -10,5 +11,5 @@ public interface StatementPrototype {
      * @param dialect Dialect to use.
      * @return Statement.
      */
-    Statement createStatement(Dialect dialect);
+    @NonNull Statement createStatement(@NonNull Dialect dialect);
 }

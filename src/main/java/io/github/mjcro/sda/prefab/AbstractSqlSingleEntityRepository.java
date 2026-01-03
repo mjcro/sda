@@ -2,6 +2,8 @@ package io.github.mjcro.sda.prefab;
 
 import io.github.mjcro.sda.SqlInvoker;
 import io.github.mjcro.sda.SqlModifier;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -25,9 +27,9 @@ public abstract class AbstractSqlSingleEntityRepository<T> extends AbstractSqlRe
      * @param tableName   Database table name.
      */
     protected AbstractSqlSingleEntityRepository(
-            SqlInvoker db,
-            Class<? extends T> entityClass,
-            String tableName
+            @NonNull SqlInvoker db,
+            @NonNull Class<? extends T> entityClass,
+            @NonNull String tableName
     ) {
         this(db, entityClass, tableName, null);
     }
@@ -41,10 +43,10 @@ public abstract class AbstractSqlSingleEntityRepository<T> extends AbstractSqlRe
      * @param timeProvider Current time provider, optional.
      */
     protected AbstractSqlSingleEntityRepository(
-            SqlInvoker db,
-            Class<? extends T> entityClass,
-            String tableName,
-            Supplier<Instant> timeProvider
+            @NonNull SqlInvoker db,
+            @NonNull Class<? extends T> entityClass,
+            @NonNull String tableName,
+            @Nullable Supplier<Instant> timeProvider
     ) {
         super(db, timeProvider);
         this.entityClass = Objects.requireNonNull(entityClass, "entityClass");
@@ -54,14 +56,14 @@ public abstract class AbstractSqlSingleEntityRepository<T> extends AbstractSqlRe
     /**
      * @return Entity class this repository works with.
      */
-    public Class<? extends T> getEntityClass() {
+    public @NonNull Class<? extends T> getEntityClass() {
         return this.entityClass;
     }
 
     /**
      * @return Database table name.
      */
-    public String getTableName() {
+    public @NonNull String getTableName() {
         return this.tableName;
     }
 }

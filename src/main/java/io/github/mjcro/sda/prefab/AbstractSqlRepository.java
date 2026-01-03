@@ -4,6 +4,8 @@ import io.github.mjcro.sda.DatabaseException;
 import io.github.mjcro.sda.SourceWither;
 import io.github.mjcro.sda.SqlInvoker;
 import io.github.mjcro.sda.SqlModifier;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -23,7 +25,7 @@ public abstract class AbstractSqlRepository {
      *
      * @param db Database connection to use, either {@link SqlInvoker} or {@link SqlModifier}.
      */
-    protected AbstractSqlRepository(SqlInvoker db) {
+    protected AbstractSqlRepository(@NonNull SqlInvoker db) {
         this(db, null);
     }
 
@@ -33,7 +35,7 @@ public abstract class AbstractSqlRepository {
      * @param db           Database connection to use, either {@link SqlInvoker} or {@link SqlModifier}.
      * @param timeProvider Current time provider, optional.
      */
-    protected AbstractSqlRepository(SqlInvoker db, Supplier<Instant> timeProvider) {
+    protected AbstractSqlRepository(@NonNull SqlInvoker db, @Nullable Supplier<Instant> timeProvider) {
         this.sqlInvoker = Objects.requireNonNull(db, "db");
         this.sqlModifier = (db instanceof SqlModifier) ? (SqlModifier) db : null;
         this.timeProvider = timeProvider == null ? Instant::now : timeProvider;
@@ -42,12 +44,12 @@ public abstract class AbstractSqlRepository {
     /**
      * @return Current time.
      */
-    protected Instant getCurrentTime() {
+    protected @NonNull Instant getCurrentTime() {
         return timeProvider.get();
     }
 
     /**
-     * @return Current time represented as epoch second (unix timestamp).
+     * @return Current time represented as epoch second (Unix timestamp).
      */
     protected long getCurrentEpochSecond() {
         return getCurrentTime().getEpochSecond();
@@ -56,7 +58,7 @@ public abstract class AbstractSqlRepository {
     /**
      * @return SQL invoker.
      */
-    protected SqlInvoker getSqlInvoker() {
+    protected @NonNull SqlInvoker getSqlInvoker() {
         return sqlInvoker instanceof SourceWither<?>
                 ? (SqlInvoker) ((SourceWither<?>) sqlInvoker).withSource(this)
                 : sqlInvoker;
@@ -65,7 +67,7 @@ public abstract class AbstractSqlRepository {
     /**
      * @return SQL modifier.
      */
-    protected SqlModifier getSqlModifier() {
+    protected @NonNull SqlModifier getSqlModifier() {
         if (sqlModifier == null) {
             throw new DatabaseException("no SQL modifier configured for " + getClass().getName());
         }

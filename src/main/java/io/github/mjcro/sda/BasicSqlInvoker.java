@@ -1,6 +1,8 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.sql.ConnectionProvider;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,10 +32,10 @@ public class BasicSqlInvoker implements SqlInvoker, SourceWither<SqlInvoker> {
      * @param sqlTracer          Component used to track SQL timings and errors. Optional.
      */
     public BasicSqlInvoker(
-            Dialect dialect,
-            ConnectionProvider connectionProvider,
-            RowMapperFactory rowMapperFactory,
-            SqlTracer sqlTracer
+            @NonNull Dialect dialect,
+            @NonNull ConnectionProvider connectionProvider,
+            @NonNull RowMapperFactory rowMapperFactory,
+            @Nullable SqlTracer sqlTracer
     ) {
         this(null, dialect, connectionProvider, rowMapperFactory, sqlTracer);
     }
@@ -48,11 +50,11 @@ public class BasicSqlInvoker implements SqlInvoker, SourceWither<SqlInvoker> {
      * @param sqlTracer          Component used to track SQL timings and errors. Optional.
      */
     BasicSqlInvoker(
-            Object source,
-            Dialect dialect,
-            ConnectionProvider connectionProvider,
-            RowMapperFactory rowMapperFactory,
-            SqlTracer sqlTracer
+            @Nullable Object source,
+            @NonNull Dialect dialect,
+            @NonNull ConnectionProvider connectionProvider,
+            @NonNull RowMapperFactory rowMapperFactory,
+            @Nullable SqlTracer sqlTracer
     ) {
         this.dialect = Objects.requireNonNull(dialect, "dialect");
         this.source = source == null ? this : source;
@@ -66,13 +68,13 @@ public class BasicSqlInvoker implements SqlInvoker, SourceWither<SqlInvoker> {
 
 
     @Override
-    public Dialect getDialect() {
+    public @NonNull Dialect getDialect() {
         return dialect;
     }
 
     @Override
-    public BasicSqlInvoker withSource(Object source) {
-        return this == source
+    public @NonNull BasicSqlInvoker withSource(@NonNull Object source) {
+        return this.source == source
                 ? this
                 : new BasicSqlInvoker(source, dialect, connectionProvider, rowMapperFactory, sqlTracer);
     }
@@ -83,7 +85,7 @@ public class BasicSqlInvoker implements SqlInvoker, SourceWither<SqlInvoker> {
      * @return Database connection.
      * @throws SQLException On connection error.
      */
-    protected Connection getConnection() throws SQLException {
+    protected @NonNull Connection getConnection() throws SQLException {
         return connectionProvider.getConnection();
     }
 
@@ -94,7 +96,7 @@ public class BasicSqlInvoker implements SqlInvoker, SourceWither<SqlInvoker> {
      * @param parameters Values to set.
      * @throws SQLException On statement error.
      */
-    protected void prepareAndSet(PreparedStatement statement, Object[] parameters) throws SQLException {
+    protected void prepareAndSet(@NonNull PreparedStatement statement, @Nullable Object @Nullable [] parameters) throws SQLException {
         if (parameters != null && parameters.length > 0) {
             for (int i = 0; i < parameters.length; i++) {
                 statement.setObject(i + 1, getDialect().prepareParameters(parameters[i]));
@@ -111,17 +113,17 @@ public class BasicSqlInvoker implements SqlInvoker, SourceWither<SqlInvoker> {
      * @param error      Exception, optional.
      */
     protected void finishSqlTraceNano(
-            String sql,
-            Object[] parameters,
+            @NonNull String sql,
+            @Nullable Object @Nullable [] parameters,
             long startNano,
-            Exception error
+            @Nullable Exception error
     ) {
         sqlTracer.trace(source, sql, parameters, Duration.ofNanos(System.nanoTime() - startNano), error);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> list(Class<? extends T> clazz, String sql, Object[] parameters) {
+    public @NonNull <T> List<T> list(@NonNull Class<? extends T> clazz, @NonNull String sql, @Nullable Object @Nullable [] parameters) {
         RowMapper<T> rowMapper = (RowMapper<T>) rowMapperFactory.get(clazz);
 
         long nano = System.nanoTime();

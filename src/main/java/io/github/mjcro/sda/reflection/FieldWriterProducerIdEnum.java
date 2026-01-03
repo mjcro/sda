@@ -1,11 +1,13 @@
 package io.github.mjcro.sda.reflection;
 
+import org.jspecify.annotations.NonNull;
+
 import java.util.HashMap;
 import java.util.Optional;
 
 public class FieldWriterProducerIdEnum extends AbstractClassCachingProducer {
     @Override
-    public boolean isSupported(Class<?> clazz) {
+    public boolean isSupported(@NonNull Class<?> clazz) {
         return Enum.class.isAssignableFrom(clazz) && (
                 io.github.mjcro.interfaces.ints.WithId.class.isAssignableFrom(clazz)
                         || io.github.mjcro.interfaces.longs.WithId.class.isAssignableFrom(clazz)
@@ -13,7 +15,7 @@ public class FieldWriterProducerIdEnum extends AbstractClassCachingProducer {
     }
 
     @Override
-    public FieldWriterProducer initializeCache(Class<?> clazz) {
+    public @NonNull FieldWriterProducer initializeCache(@NonNull Class<?> clazz) {
         // Building values map
         HashMap<Long, Object> values = new HashMap<>();
         for (Object cc : clazz.getEnumConstants()) {

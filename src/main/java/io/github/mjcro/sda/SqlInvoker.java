@@ -1,6 +1,8 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +18,7 @@ public interface SqlInvoker {
     /**
      * @return SQL invoker dialect to use.
      */
-    Dialect getDialect();
+    @NonNull Dialect getDialect();
 
     /**
      * Fetches collection of items from database.
@@ -28,7 +30,7 @@ public interface SqlInvoker {
      * @param <T>        Response item type.
      * @return Collection of items.
      */
-    <T> List<T> list(Class<? extends T> clazz, String sql, Object[] parameters);
+    @NonNull <T> List<T> list(@NonNull Class<? extends T> clazz, @NonNull String sql, @Nullable Object @Nullable [] parameters);
 
     /**
      * Fetches collection of items from database.
@@ -39,7 +41,7 @@ public interface SqlInvoker {
      * @param <T>       Response item type.
      * @return Collection of items.
      */
-    default <T> List<T> list(Class<? extends T> clazz, Statement statement) {
+    default @NonNull <T> List<T> list(@NonNull Class<? extends T> clazz, @NonNull Statement statement) {
         return this.list(clazz, statement.getSql(), statement.getParameters());
     }
 
@@ -52,7 +54,7 @@ public interface SqlInvoker {
      * @param <T>       Response item type.
      * @return Collection of items.
      */
-    default <T> List<T> list(Class<? extends T> clazz, StatementPrototype prototype) {
+    default @NonNull <T> List<T> list(@NonNull Class<? extends T> clazz, @NonNull StatementPrototype prototype) {
         return this.list(clazz, prototype.createStatement(getDialect()));
     }
 
@@ -68,11 +70,11 @@ public interface SqlInvoker {
      * @param <T>        Response item type.
      * @return Map of items.
      */
-    default <K, T> Map<K, T> map(
-            Class<? extends T> clazz,
-            Function<? super T, ? extends K> keyMapper,
-            String sql,
-            Object[] parameters
+    default @NonNull <K, T> Map<K, T> map(
+            @NonNull Class<? extends T> clazz,
+            @NonNull Function<? super T, ? extends K> keyMapper,
+            @NonNull String sql,
+            @Nullable Object @Nullable [] parameters
     ) {
         return this.list(clazz, sql, parameters)
                 .stream()
@@ -93,10 +95,10 @@ public interface SqlInvoker {
      * @param <T>       Response item type.
      * @return Map of items.
      */
-    default <K, T> Map<K, T> map(
-            Class<? extends T> clazz,
-            Function<? super T, ? extends K> keyMapper,
-            Statement statement
+    default @NonNull <K, T> Map<K, T> map(
+            @NonNull Class<? extends T> clazz,
+            @NonNull Function<? super T, ? extends K> keyMapper,
+            @NonNull Statement statement
     ) {
         return this.map(clazz, keyMapper, statement.getSql(), statement.getParameters());
     }
@@ -112,10 +114,10 @@ public interface SqlInvoker {
      * @param <T>       Response item type.
      * @return Map of items.
      */
-    default <K, T> Map<K, T> map(
-            Class<? extends T> clazz,
-            Function<? super T, ? extends K> keyMapper,
-            StatementPrototype prototype
+    default @NonNull <K, T> Map<K, T> map(
+            @NonNull Class<? extends T> clazz,
+            @NonNull Function<? super T, ? extends K> keyMapper,
+            @NonNull StatementPrototype prototype
     ) {
         return this.map(clazz, keyMapper, prototype.createStatement(getDialect()));
     }
@@ -132,11 +134,11 @@ public interface SqlInvoker {
      * @param <T>               Response item type.
      * @return Map of items.
      */
-    default <K, T> Map<K, List<T>> grouped(
-            Class<? extends T> clazz,
-            Function<? super T, ? extends K> groupingKeyMapper,
-            String sql,
-            Object[] parameters
+    default @NonNull <K, T> Map<K, List<T>> grouped(
+            @NonNull Class<? extends T> clazz,
+            @NonNull Function<? super T, ? extends K> groupingKeyMapper,
+            @NonNull String sql,
+            @Nullable Object @Nullable [] parameters
     ) {
         return this.list(clazz, sql, parameters)
                 .stream()
@@ -154,10 +156,10 @@ public interface SqlInvoker {
      * @param <T>               Response item type.
      * @return Map of items.
      */
-    default <K, T> Map<K, List<T>> grouped(
-            Class<? extends T> clazz,
-            Function<? super T, ? extends K> groupingKeyMapper,
-            Statement statement
+    default @NonNull <K, T> Map<K, List<T>> grouped(
+            @NonNull Class<? extends T> clazz,
+            @NonNull Function<? super T, ? extends K> groupingKeyMapper,
+            @NonNull Statement statement
     ) {
         return this.grouped(clazz, groupingKeyMapper, statement.getSql(), statement.getParameters());
     }
@@ -173,10 +175,10 @@ public interface SqlInvoker {
      * @param <T>               Response item type.
      * @return Map of items.
      */
-    default <K, T> Map<K, List<T>> grouped(
-            Class<? extends T> clazz,
-            Function<? super T, ? extends K> groupingKeyMapper,
-            StatementPrototype prototype
+    default @NonNull <K, T> Map<K, List<T>> grouped(
+            @NonNull Class<? extends T> clazz,
+            @NonNull Function<? super T, ? extends K> groupingKeyMapper,
+            @NonNull StatementPrototype prototype
     ) {
         return this.grouped(clazz, groupingKeyMapper, prototype.createStatement(getDialect()));
     }
@@ -192,7 +194,7 @@ public interface SqlInvoker {
      * @return Item.
      */
     @SuppressWarnings("unchecked")
-    default <T> Optional<T> one(Class<? extends T> clazz, String sql, Object[] parameters) {
+    default @NonNull <T> Optional<T> one(@NonNull Class<? extends T> clazz, @NonNull String sql, @Nullable Object @Nullable [] parameters) {
         return (Optional<T>) list(clazz, sql, parameters).stream().findFirst();
     }
 
@@ -205,7 +207,7 @@ public interface SqlInvoker {
      * @param <T>       Response item type.
      * @return Item.
      */
-    default <T> Optional<T> one(Class<? extends T> clazz, Statement statement) {
+    default @NonNull <T> Optional<T> one(@NonNull Class<? extends T> clazz, @NonNull Statement statement) {
         return one(clazz, statement.getSql(), statement.getParameters());
     }
 
@@ -218,7 +220,7 @@ public interface SqlInvoker {
      * @param <T>       Response item type.
      * @return Item.
      */
-    default <T> Optional<T> one(Class<? extends T> clazz, StatementPrototype prototype) {
+    default @NonNull <T> Optional<T> one(@NonNull Class<? extends T> clazz, @NonNull StatementPrototype prototype) {
         Statement statement = prototype.createStatement(getDialect());
         return one(clazz, statement.getSql(), statement.getParameters());
     }

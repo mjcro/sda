@@ -1,6 +1,8 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.sql.ConnectionProvider;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,10 +26,10 @@ public class BasicSqlModifier implements SqlModifier, SourceWither<SqlModifier> 
      * @param sqlTracer          Component used to track SQL timings and errors. Optional.
      */
     public BasicSqlModifier(
-            Dialect dialect,
-            ConnectionProvider connectionProvider,
-            RowMapperFactory rowMapperFactory,
-            SqlTracer sqlTracer
+            @NonNull Dialect dialect,
+            @NonNull ConnectionProvider connectionProvider,
+            @NonNull RowMapperFactory rowMapperFactory,
+            @Nullable SqlTracer sqlTracer
     ) {
         this(new BasicSqlInvoker(dialect, connectionProvider, rowMapperFactory, sqlTracer));
     }
@@ -37,27 +39,27 @@ public class BasicSqlModifier implements SqlModifier, SourceWither<SqlModifier> 
      *
      * @param invoker SQL invoker to wrap.
      */
-    private BasicSqlModifier(BasicSqlInvoker invoker) {
+    private BasicSqlModifier(@NonNull BasicSqlInvoker invoker) {
         this.basicSqlInvoker = invoker;
     }
 
     @Override
-    public Dialect getDialect() {
+    public @NonNull Dialect getDialect() {
         return basicSqlInvoker.getDialect();
     }
 
     @Override
-    public SqlModifier withSource(Object source) {
+    public @NonNull SqlModifier withSource(@NonNull Object source) {
         return new BasicSqlModifier(basicSqlInvoker.withSource(source));
     }
 
     @Override
-    public <T> List<T> list(Class<? extends T> clazz, String sql, Object[] parameters) {
+    public @NonNull <T> List<T> list(@NonNull Class<? extends T> clazz, @NonNull String sql, @Nullable Object @Nullable [] parameters) {
         return basicSqlInvoker.list(clazz, sql, parameters);
     }
 
     @Override
-    public OptionalLong modify(String sql, Object[] parameters) {
+    public @NonNull OptionalLong modify(@NonNull String sql, @Nullable Object @Nullable [] parameters) {
         long nano = System.nanoTime();
         try (Connection connection = basicSqlInvoker.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {

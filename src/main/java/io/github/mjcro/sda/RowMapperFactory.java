@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import org.jspecify.annotations.NonNull;
+
 public interface RowMapperFactory {
-    <T> RowMapper<T> get(Class<T> clazz);
+    @NonNull <T> RowMapper<T> get(@NonNull Class<T> clazz);
 }

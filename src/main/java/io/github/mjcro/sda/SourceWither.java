@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import org.jspecify.annotations.NonNull;
+
 public interface SourceWither<T> {
     /**
      * Returns new instance of same class but with source parameter injected.
@@ -7,5 +9,5 @@ public interface SourceWither<T> {
      * @param source Source.
      * @return New instance.
      */
-    T withSource(Object source);
+    @NonNull T withSource(@NonNull Object source);
 }

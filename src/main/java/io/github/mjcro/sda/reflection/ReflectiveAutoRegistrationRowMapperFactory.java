@@ -4,6 +4,8 @@ import io.github.mjcro.sda.BasicRowMapperFactory;
 import io.github.mjcro.sda.Column;
 import io.github.mjcro.sda.FieldWriter;
 import io.github.mjcro.sda.RowMapper;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -28,7 +30,7 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
      * @param others Field writer producers to use.
      * @return Row mapper factory.
      */
-    public static BasicRowMapperFactory standard(FieldWriterProducer... others) {
+    public static BasicRowMapperFactory standard(@NonNull FieldWriterProducer @Nullable ... others) {
         FieldWriterProducerSequentialList list = new FieldWriterProducerSequentialList(List.of(
                 new FieldWriterProducerByMapperAnnotation(),
                 new FieldWriterProducerByCreatorAnnotation(),
@@ -52,7 +54,7 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
      * @param clazz Class to start recursion from.
      * @return Found fields.
      */
-    static List<Field> recursiveFields(Class<?> clazz) {
+    static @NonNull List<Field> recursiveFields(@NonNull Class<?> clazz) {
         if (clazz == Object.class) {
             return List.of();
         }
@@ -68,24 +70,21 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
         return fields;
     }
 
-    public ReflectiveAutoRegistrationRowMapperFactory(FieldWriterProducer writerProducer) {
+    public ReflectiveAutoRegistrationRowMapperFactory(@NonNull FieldWriterProducer writerProducer) {
         this.writerProducer = Objects.requireNonNull(writerProducer, "writerProducer");
     }
 
     @Override
-    public <T> RowMapper<T> get(Class<T> clazz) {
+    public @NonNull <T> RowMapper<T> get(@NonNull Class<T> clazz) {
         if (!contains(clazz)) {
-            RowMapper<T> rowMapper = create(clazz);
-            if (rowMapper != null) {
-                register(clazz, rowMapper);
-            }
+            register(clazz, create(clazz));
         }
 
         return super.get(clazz);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> RowMapper<T> create(Class<T> clazz) {
+    public @NonNull <T> RowMapper<T> create(@NonNull Class<T> clazz) {
         Objects.requireNonNull(clazz, "clazz");
         // Determining constructor
         Supplier<T> objectSupplier;
@@ -109,7 +108,7 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
         );
     }
 
-    public FieldWriter<?> getFieldWriter(Field field) {
+    public @NonNull FieldWriter<?> getFieldWriter(@NonNull Field field) {
         field.setAccessible(true);
         String columnName = field.isAnnotationPresent(Column.class)
                 ? field.getAnnotation(Column.class).value()
@@ -121,14 +120,14 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
     private static final class ConstructorObjectSupplier<T> implements Supplier<T> {
         private final Constructor<T> constructor;
 
-        private ConstructorObjectSupplier(Constructor<T> constructor) {
+        private ConstructorObjectSupplier(@NonNull Constructor<T> constructor) {
             Objects.requireNonNull(constructor, "constructor");
             this.constructor = constructor;
             this.constructor.setAccessible(true);
         }
 
         @Override
-        public T get() {
+        public @NonNull T get() {
             try {
                 return constructor.newInstance();
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -142,14 +141,14 @@ public class ReflectiveAutoRegistrationRowMapperFactory extends BasicRowMapperFa
         private final Supplier<T> constructor;
         private final FieldWriter<T>[] writers;
 
-        private ManagedRowMapper(Class<T> clazz, Supplier<T> constructor, FieldWriter<T>[] writers) {
+        private ManagedRowMapper(@NonNull Class<T> clazz, @NonNull Supplier<T> constructor, @NonNull FieldWriter<T>[] writers) {
             this.clazz = clazz;
             this.constructor = constructor;
             this.writers = writers;
         }
 
         @Override
-        public T mapRow(ResultSet rs) throws SQLException {
+        public @NonNull T mapRow(@NonNull ResultSet rs) throws SQLException {
             // Constructing instance
             T t = constructor.get();
 

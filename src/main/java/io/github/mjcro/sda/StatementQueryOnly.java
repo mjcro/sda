@@ -1,6 +1,7 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ class StatementQueryOnly implements Statement {
     private static final Object[] parameters = new Object[0];
     private final String sql;
 
-    StatementQueryOnly(String sql) {
+    StatementQueryOnly(@NonNull String sql) {
         this.sql = Objects.requireNonNull(sql, "sql");
     }
 

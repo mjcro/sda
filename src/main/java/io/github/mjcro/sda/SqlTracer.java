@@ -1,5 +1,8 @@
 package io.github.mjcro.sda;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import java.time.Duration;
 
 public interface SqlTracer {
@@ -13,10 +16,10 @@ public interface SqlTracer {
      * @param error      Error, optional. Will be empty on success.
      */
     void trace(
-            Object source,
-            String sql,
-            Object[] parameters,
-            Duration elapsed,
-            Exception error
+            @NonNull Object source,
+            @NonNull String sql,
+            @Nullable Object @Nullable [] parameters,
+            @NonNull Duration elapsed,
+            @Nullable Exception error
     );
 }

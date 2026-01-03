@@ -1,6 +1,8 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +18,7 @@ public class Statements {
      * @param parameters Parameters.
      * @return Statement.
      */
-    public static Statement of(String sql, Object[] parameters) {
+    public static @NonNull Statement of(@NonNull String sql, @Nullable Object @Nullable [] parameters) {
         return parameters == null || parameters.length == 0
                 ? new StatementQueryOnly(sql)
                 : new StatementSimple(sql, parameters);
@@ -28,7 +30,7 @@ public class Statements {
      * @param builder Builder function.
      * @return Statement.
      */
-    public static Statement build(BiConsumer<StringBuilder, ArrayList<Object>> builder) {
+    public static @NonNull Statement build(@NonNull BiConsumer<StringBuilder, ArrayList<Object>> builder) {
         StringBuilder stringBuilder = new StringBuilder();
         ArrayList<Object> parameters = new ArrayList<>();
         builder.accept(stringBuilder, parameters);
@@ -43,10 +45,10 @@ public class Statements {
      * @param identifiers Column identifiers.
      * @return Statement prototype.
      */
-    public static StatementPrototype matchColumn(
-            String table,
-            String column,
-            Collection<Object> identifiers
+    public static @NonNull StatementPrototype matchColumn(
+            @NonNull String table,
+            @NonNull String column,
+            @NonNull Collection<Object> identifiers
     ) {
         return dialect -> {
             if (dialect.isCompatibleWith(Dialect.MySQL)) {
@@ -66,12 +68,12 @@ public class Statements {
      * @param identifiersTwo Column identifiers.
      * @return Statement prototype.
      */
-    public static StatementPrototype matchColumn(
-            String table,
-            String columnOne,
-            Collection<Object> identifiersOne,
-            String columnTwo,
-            Collection<Object> identifiersTwo
+    public static @NonNull StatementPrototype matchColumn(
+            @NonNull String table,
+            @NonNull String columnOne,
+            @NonNull Collection<Object> identifiersOne,
+            @NonNull String columnTwo,
+            @NonNull Collection<Object> identifiersTwo
     ) {
         return dialect -> {
             if (dialect.isCompatibleWith(Dialect.MySQL)) {
@@ -88,9 +90,9 @@ public class Statements {
      * @param values Values to insert.
      * @return Statement prototype.
      */
-    public static StatementPrototype insert(
-            String table,
-            Map<String, Object> values
+    public static @NonNull StatementPrototype insert(
+            @NonNull String table,
+            @NonNull Map<String, Object> values
     ) {
         return dialect -> {
             if (dialect.isCompatibleWith(Dialect.MySQL)) {
@@ -107,7 +109,7 @@ public class Statements {
      * @param b Second statement.
      * @return True if statements has same query and parameters.
      */
-    public static boolean basicallyEquals(Statement a, Statement b) {
+    public static boolean basicallyEquals(@Nullable Statement a, @Nullable Statement b) {
         if (a == null || b == null) {
             return false; // If any of statements is null they are not equal.
         }
@@ -125,7 +127,7 @@ public class Statements {
      * @param s Statement to calculate hash for.
      * @return Calculated hash code.
      */
-    public static int basicHashCode(Statement s) {
+    public static int basicHashCode(@Nullable Statement s) {
         return s == null ? 0 : s.getSql().hashCode();
     }
 

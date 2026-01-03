@@ -1,11 +1,14 @@
 package io.github.mjcro.sda;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 public class RowMapperException extends DatabaseException {
-    public RowMapperException(String message) {
+    public RowMapperException(@Nullable String message) {
         super(message);
     }
 
-    public RowMapperException(Class<?> clazz) {
+    public RowMapperException(@NonNull Class<?> clazz) {
         this(String.format("No suitable mapper for clazz %s", clazz.getName()));
     }
 }

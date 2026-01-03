@@ -1,18 +1,20 @@
 package io.github.mjcro.sda;
 
+import org.jspecify.annotations.NonNull;
+
 /**
  * Pagination request.
  */
 public interface Paging {
-    static Paging single() {
+    static @NonNull Paging single() {
         return limit(1);
     }
 
-    static Paging limit(int limit) {
+    static @NonNull Paging limit(int limit) {
         return ofPageAndLimit(1, limit);
     }
 
-    static Paging ofPageAndLimit(int page, int limit) {
+    static @NonNull Paging ofPageAndLimit(int page, int limit) {
         return new PagingImpl(page, limit);
     }
 

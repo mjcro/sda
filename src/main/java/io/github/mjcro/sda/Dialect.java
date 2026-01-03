@@ -1,5 +1,8 @@
 package io.github.mjcro.sda;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import java.sql.SQLException;
 
 /**
@@ -19,7 +22,7 @@ public interface Dialect {
      * @param other Dialect to compare with;
      * @return True if both dialects are same or compatible.
      */
-    default boolean isCompatibleWith(Dialect other) {
+    default boolean isCompatibleWith(@Nullable Dialect other) {
         return other == this;
     }
 
@@ -29,7 +32,7 @@ public interface Dialect {
      * @param source Source exception.
      * @return Resulting exception.
      */
-    default DatabaseException convertException(SQLException source) {
+    default @NonNull DatabaseException convertException(@NonNull SQLException source) {
         return new DatabaseException(source);
     }
 
@@ -39,7 +42,7 @@ public interface Dialect {
      * @param value Parameter value.
      * @return Prepared value.
      */
-    default Object prepareParameters(Object value) {
+    default @Nullable Object prepareParameters(@Nullable Object value) {
         return value;
     }
 }

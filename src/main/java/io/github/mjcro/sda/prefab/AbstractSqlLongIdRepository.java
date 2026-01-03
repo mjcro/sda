@@ -3,6 +3,8 @@ package io.github.mjcro.sda.prefab;
 import io.github.mjcro.sda.SqlInvoker;
 import io.github.mjcro.sda.SqlModifier;
 import io.github.mjcro.sda.Statements;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -26,9 +28,9 @@ public class AbstractSqlLongIdRepository<T> extends AbstractSqlSingleEntityRepos
      * @param tableName   Database table name.
      */
     protected AbstractSqlLongIdRepository(
-            SqlInvoker db,
-            Class<? extends T> entityClass,
-            String tableName
+            @NonNull SqlInvoker db,
+            @NonNull Class<? extends T> entityClass,
+            @NonNull String tableName
     ) {
         super(db, entityClass, tableName);
     }
@@ -42,15 +44,15 @@ public class AbstractSqlLongIdRepository<T> extends AbstractSqlSingleEntityRepos
      * @param timeProvider Current time provider, optional.
      */
     protected AbstractSqlLongIdRepository(
-            SqlInvoker db,
-            Class<? extends T> entityClass,
-            String tableName,
-            Supplier<Instant> timeProvider
+            @NonNull SqlInvoker db,
+            @NonNull Class<? extends T> entityClass,
+            @NonNull String tableName,
+            @Nullable Supplier<Instant> timeProvider
     ) {
         super(db, entityClass, tableName, timeProvider);
     }
 
-    public List<T> findById(final long... ids) {
+    public @NonNull List<T> findById(final long @Nullable ... ids) {
         if (ids == null || ids.length == 0) {
             return List.of();
         }

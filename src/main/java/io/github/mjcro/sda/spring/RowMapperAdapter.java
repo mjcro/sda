@@ -1,6 +1,7 @@
 package io.github.mjcro.sda.spring;
 
 import io.github.mjcro.sda.RowMapper;
+import org.jspecify.annotations.NonNull;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,12 +20,13 @@ public class RowMapperAdapter<T> implements RowMapper<T> {
      *
      * @param spring Spring RowMapper.
      */
-    public RowMapperAdapter(org.springframework.jdbc.core.RowMapper<T> spring) {
+    public RowMapperAdapter(org.springframework.jdbc.core.@NonNull RowMapper<T> spring) {
         this.spring = Objects.requireNonNull(spring, "inner");
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Override
-    public T mapRow(ResultSet rs) throws SQLException {
+    public @NonNull T mapRow(@NonNull ResultSet rs) throws SQLException {
         return spring.mapRow(rs, 0);
     }
 }

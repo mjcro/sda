@@ -1,6 +1,8 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.OptionalLong;
 
@@ -16,7 +18,7 @@ public interface SqlModifier extends SqlInvoker {
      * @param parameters Parameters.
      * @return Identifier of inserted data or number of affected rows.
      */
-    OptionalLong modify(String sql, Object[] parameters);
+    @NonNull OptionalLong modify(@NonNull String sql, @Nullable Object @Nullable [] parameters);
 
     /**
      * Performs modification request (INSERT, UPDATE, DELETE, etc...).
@@ -24,7 +26,7 @@ public interface SqlModifier extends SqlInvoker {
      * @param prototype Statement containing query and parameters.
      * @return Identifier of inserted data or number of affected rows.
      */
-    default OptionalLong modify(StatementPrototype prototype) {
+    default @NonNull OptionalLong modify(@NonNull StatementPrototype prototype) {
         return modify(prototype.createStatement(getDialect()));
     }
 
@@ -34,7 +36,7 @@ public interface SqlModifier extends SqlInvoker {
      * @param statement Statement containing query and parameters.
      * @return Identifier of inserted data or number of affected rows.
      */
-    default OptionalLong modify(Statement statement) {
+    default @NonNull OptionalLong modify(@NonNull Statement statement) {
         return modify(statement.getSql(), statement.getParameters());
     }
 }

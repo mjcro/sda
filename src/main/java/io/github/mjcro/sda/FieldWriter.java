@@ -1,5 +1,7 @@
 package io.github.mjcro.sda;
 
+import org.jspecify.annotations.NonNull;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -11,5 +13,5 @@ public interface FieldWriter<T> {
      * @param to   Target object.
      * @throws SQLException On write error.
      */
-    void write(ResultSet from, T to) throws SQLException;
+    void write(@NonNull ResultSet from, @NonNull T to) throws SQLException;
 }

@@ -1,6 +1,7 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class MySqlUtil {
      * @param sb    String builder to write data into.
      * @param times Repeat count.
      */
-    public static void writePlaceholders(StringBuilder sb, int times) {
+    public static void writePlaceholders(@NonNull StringBuilder sb, int times) {
         boolean first = true;
         for (int i = 0; i < times; i++) {
             if (first) {
@@ -32,7 +33,7 @@ public class MySqlUtil {
         }
     }
 
-    public static void writeEqOrIn(StringBuilder sb, Collection<?> collection) {
+    public static void writeEqOrIn(@NonNull StringBuilder sb, @NonNull Collection<?> collection) {
         if (collection.size() == 1) {
             sb.append(" = ?");
         } else {
@@ -48,7 +49,7 @@ public class MySqlUtil {
      * @param name Source name.
      * @return Escaped name.
      */
-    public static String name(String name) {
+    public static @NonNull String name(@NonNull String name) {
         if (name.startsWith("`") && name.endsWith("`")) {
             return name;
         }
@@ -56,10 +57,10 @@ public class MySqlUtil {
         return "`" + name + "`";
     }
 
-    static Statement matchColumn(
-            String table,
-            String column,
-            Collection<Object> identifiers
+    static @NonNull Statement matchColumn(
+            @NonNull String table,
+            @NonNull String column,
+            @NonNull Collection<Object> identifiers
     ) {
         Objects.requireNonNull(table, "table");
         Objects.requireNonNull(column, "column");
@@ -72,12 +73,12 @@ public class MySqlUtil {
         });
     }
 
-    static Statement matchColumn(
-            String table,
-            String columnOne,
-            Collection<Object> identifiersOne,
-            String columnTwo,
-            Collection<Object> identifiersTwo
+    static @NonNull Statement matchColumn(
+            @NonNull String table,
+            @NonNull String columnOne,
+            @NonNull Collection<Object> identifiersOne,
+            @NonNull String columnTwo,
+            @NonNull Collection<Object> identifiersTwo
     ) {
         Objects.requireNonNull(table, "table");
         Objects.requireNonNull(columnOne, "columnOne");
@@ -98,9 +99,9 @@ public class MySqlUtil {
         });
     }
 
-    static Statement insert(
-            String table,
-            Map<String, Object> values
+    static @NonNull Statement insert(
+            @NonNull String table,
+            @NonNull Map<String, Object> values
     ) {
         Objects.requireNonNull(table, "table");
         Objects.requireNonNull(values, "values");

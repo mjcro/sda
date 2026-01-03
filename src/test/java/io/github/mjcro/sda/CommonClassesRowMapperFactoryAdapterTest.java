@@ -1,5 +1,6 @@
 package io.github.mjcro.sda;
 
+import org.jspecify.annotations.NonNull;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -13,7 +14,7 @@ public class CommonClassesRowMapperFactoryAdapterTest {
 
         Long value = new CommonClassesRowMapperFactoryAdapter(new RowMapperFactory() {
             @Override
-            public <T> RowMapper<T> get(Class<T> clazz) {
+            public @NonNull <T> RowMapper<T> get(@NonNull Class<T> clazz) {
                 return null;
             }
         }).get(long.class).mapRow(rs);
@@ -27,7 +28,7 @@ public class CommonClassesRowMapperFactoryAdapterTest {
 
         Integer value = new CommonClassesRowMapperFactoryAdapter(new RowMapperFactory() {
             @Override
-            public <T> RowMapper<T> get(Class<T> clazz) {
+            public @NonNull <T> RowMapper<T> get(@NonNull Class<T> clazz) {
                 return null;
             }
         }).get(int.class).mapRow(rs);
@@ -41,7 +42,7 @@ public class CommonClassesRowMapperFactoryAdapterTest {
 
         String value = new CommonClassesRowMapperFactoryAdapter(new RowMapperFactory() {
             @Override
-            public <T> RowMapper<T> get(Class<T> clazz) {
+            public @NonNull <T> RowMapper<T> get(@NonNull Class<T> clazz) {
                 return null;
             }
         }).get(String.class).mapRow(rs);

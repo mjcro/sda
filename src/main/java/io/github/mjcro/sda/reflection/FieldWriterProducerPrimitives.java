@@ -1,6 +1,7 @@
 package io.github.mjcro.sda.reflection;
 
 import io.github.mjcro.sda.FieldWriter;
+import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ public class FieldWriterProducerPrimitives implements FieldWriterProducer {
     );
 
     @Override
-    public Optional<FieldWriter<?>> apply(final Field field, final String columnName) {
+    public @NonNull Optional<FieldWriter<?>> apply(@NonNull final Field field, @NonNull final String columnName) {
         FieldWriterProducer producer = primitives.get(field.getType());
         if (producer != null) {
             return producer.apply(field, columnName);
