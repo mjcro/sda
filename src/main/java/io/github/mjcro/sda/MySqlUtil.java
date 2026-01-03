@@ -1,8 +1,11 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
+import io.github.mjcro.writers.WriterIOException;
+import io.github.mjcro.writers.sql.MySqlNameWriter;
 import org.jspecify.annotations.NonNull;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -13,6 +16,8 @@ import java.util.Objects;
 public class MySqlUtil {
     private MySqlUtil() {
     }
+
+    private static final MySqlNameWriter nameWriter = new MySqlNameWriter();
 
     /**
      * Writes placeholder marks (?) comma-separated into
@@ -50,11 +55,15 @@ public class MySqlUtil {
      * @return Escaped name.
      */
     public static @NonNull String name(@NonNull String name) {
-        if (name.startsWith("`") && name.endsWith("`")) {
-            return name;
-        }
+        return nameWriter.asString(name);
+    }
 
-        return "`" + name + "`";
+    static void writeNameTo(@NonNull StringBuilder sb, @NonNull String name) {
+        try {
+            nameWriter.writeTo(sb, name);
+        } catch (IOException e) {
+            throw new WriterIOException(nameWriter, e);
+        }
     }
 
     static @NonNull Statement matchColumn(
@@ -67,7 +76,10 @@ public class MySqlUtil {
         Objects.requireNonNull(identifiers, "identifiers");
 
         return Statements.build((sb, ph) -> {
-            sb.append("SELECT * FROM ").append(name(table)).append(" WHERE ").append(name(column));
+            sb.append("SELECT * FROM ");
+            writeNameTo(sb, table);
+            sb.append(" WHERE ");
+            writeNameTo(sb, column);
             writeEqOrIn(sb, identifiers);
             ph.addAll(identifiers);
         });
@@ -87,12 +99,15 @@ public class MySqlUtil {
         Objects.requireNonNull(identifiersTwo, "identifiersTwo");
 
         return Statements.build((sb, ph) -> {
-            sb.append("SELECT * FROM ").append(name(table)).append(" WHERE ");
+            sb.append("SELECT * FROM ");
+            writeNameTo(sb, table);
+            sb.append(" WHERE ");
 
-            sb.append(name(columnOne));
+            writeNameTo(sb, columnOne);
             writeEqOrIn(sb, identifiersOne);
 
-            sb.append(" AND ").append(name(columnTwo));
+            sb.append(" AND ");
+            writeNameTo(sb, columnTwo);
             writeEqOrIn(sb, identifiersTwo);
             ph.addAll(identifiersOne);
             ph.addAll(identifiersTwo);
@@ -107,7 +122,9 @@ public class MySqlUtil {
         Objects.requireNonNull(values, "values");
 
         return Statements.build((sb, ph) -> {
-            sb.append("INSERT INTO ").append(name(table)).append(" (");
+            sb.append("INSERT INTO ");
+            writeNameTo(sb, table);
+            sb.append(" (");
             boolean first = true;
             for (Map.Entry<String, Object> entry : values.entrySet()) {
                 if (first) {
@@ -115,7 +132,7 @@ public class MySqlUtil {
                 } else {
                     sb.append(",");
                 }
-                sb.append(name(entry.getKey()));
+                writeNameTo(sb, entry.getKey());
                 ph.add(entry.getValue());
             }
             sb.append(") VALUES (");
