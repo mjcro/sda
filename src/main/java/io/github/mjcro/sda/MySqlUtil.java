@@ -1,11 +1,9 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
-import io.github.mjcro.writers.WriterIOException;
 import io.github.mjcro.writers.sql.MySqlNameWriter;
 import org.jspecify.annotations.NonNull;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -59,11 +57,7 @@ public class MySqlUtil {
     }
 
     static void writeNameTo(@NonNull StringBuilder sb, @NonNull String name) {
-        try {
-            nameWriter.writeTo(sb, name);
-        } catch (IOException e) {
-            throw new WriterIOException(nameWriter, e);
-        }
+        nameWriter.writeTo(sb, name);
     }
 
     static @NonNull Statement matchColumn(
