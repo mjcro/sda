@@ -42,7 +42,8 @@ public class VirtualResultSet implements ResultSet {
                 return read(i + 1);
             }
         }
-        return -1;
+        this.wasNull = true;
+        return null;
     }
 
     @Override

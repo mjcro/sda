@@ -1,8 +1,8 @@
 package io.github.mjcro.sda;
 
 import org.jspecify.annotations.NonNull;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +19,7 @@ public class CommonClassesRowMapperFactoryAdapterTest {
             }
         }).get(long.class).mapRow(rs);
 
-        Assert.assertEquals(value, 63L);
+        Assertions.assertEquals(63L, value);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class CommonClassesRowMapperFactoryAdapterTest {
             }
         }).get(int.class).mapRow(rs);
 
-        Assert.assertEquals(value, 122);
+        Assertions.assertEquals(122, value);
     }
 
     @Test
@@ -47,6 +47,6 @@ public class CommonClassesRowMapperFactoryAdapterTest {
             }
         }).get(String.class).mapRow(rs);
 
-        Assert.assertEquals(value, "Some foo");
+        Assertions.assertEquals("Some foo", value);
     }
 }
