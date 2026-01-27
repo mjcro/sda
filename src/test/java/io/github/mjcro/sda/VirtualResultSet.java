@@ -18,6 +18,7 @@ import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -25,6 +26,17 @@ public class VirtualResultSet implements ResultSet {
     private final String[] columns;
     private final Object[] data;
     private boolean wasNull = false;
+
+    @SafeVarargs
+    public static VirtualResultSet ofEntries(Map.Entry<String, Object>... entries) {
+        ArrayList<String> columns = new ArrayList<>();
+        ArrayList<Object> data = new ArrayList<>();
+        for (Map.Entry<String, Object> e : entries) {
+            columns.add(e.getKey());
+            data.add(e.getValue());
+        }
+        return new VirtualResultSet(columns.toArray(new String[0]), data.toArray(new Object[0]));
+    }
 
     public VirtualResultSet(String[] columns, Object[] data) {
         this.columns = columns;
