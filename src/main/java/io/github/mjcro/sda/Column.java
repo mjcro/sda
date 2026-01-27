@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Used to define custom name of database column.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 public @interface Column {
     String value();
 }

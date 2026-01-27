@@ -10,7 +10,26 @@ import io.github.mjcro.sda.RowMapperFactory;
 import io.github.mjcro.sda.SqlInvoker;
 import io.github.mjcro.sda.SqlModifier;
 import io.github.mjcro.sda.SqlTracer;
-import io.github.mjcro.sda.reflection.ReflectiveAutoRegistrationRowMapperFactory;
+import io.github.mjcro.sda.TieredTypeHandlerList;
+import io.github.mjcro.sda.reflection.BigDecimalTypeHandler;
+import io.github.mjcro.sda.reflection.ByteArrayTypeHandler;
+import io.github.mjcro.sda.reflection.ByteTypeHandler;
+import io.github.mjcro.sda.reflection.CreatorAnnotationTypeHandler;
+import io.github.mjcro.sda.reflection.DoubleTypeHandler;
+import io.github.mjcro.sda.reflection.EntityConstructorTypeHandler;
+import io.github.mjcro.sda.reflection.EntityFieldsTypeHandler;
+import io.github.mjcro.sda.reflection.EnumIntegerIdTypeHandler;
+import io.github.mjcro.sda.reflection.EnumLongIdTypeHandler;
+import io.github.mjcro.sda.reflection.EnumNameTypeHandler;
+import io.github.mjcro.sda.reflection.FloatTypeHandler;
+import io.github.mjcro.sda.reflection.IntTypeHandler;
+import io.github.mjcro.sda.reflection.LocalDateTypeHandler;
+import io.github.mjcro.sda.reflection.LongTypeHandler;
+import io.github.mjcro.sda.reflection.MapperAnnotationTypeHandler;
+import io.github.mjcro.sda.reflection.ShortTypeHandler;
+import io.github.mjcro.sda.reflection.StringTypeHandler;
+import io.github.mjcro.sda.reflection.StrongTypesTypeHandler;
+import io.github.mjcro.sda.reflection.TypeHandlerRowMapperFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,9 +39,48 @@ import java.util.function.Supplier;
 @Configuration
 public class SimpleDatabaseAccessConfiguration {
     @Bean
-    public RowMapperFactory rowMapperFactory() {
+    public TieredTypeHandlerList tieredTypeHandlerList() {
+        TieredTypeHandlerList list = new TieredTypeHandlerList();
+            return list
+                    .addLast(
+                            TieredTypeHandlerList.Tier.ENTITY_CONSTRUCTORS,
+                            new EntityFieldsTypeHandler(list),
+                            new EntityConstructorTypeHandler(list)
+                    )
+                    .addLast(
+                            TieredTypeHandlerList.Tier.ANNOTATION_PROCESSORS,
+                            new MapperAnnotationTypeHandler(),
+                            new CreatorAnnotationTypeHandler()
+                    )
+                    .addLast(
+                            TieredTypeHandlerList.Tier.TYPES,
+                            new StrongTypesTypeHandler(),
+                            new StringTypeHandler(),
+                            new ByteTypeHandler(false),
+                            new ByteTypeHandler(true),
+                            new ShortTypeHandler(false),
+                            new ShortTypeHandler(true),
+                            new IntTypeHandler(false),
+                            new IntTypeHandler(true),
+                            new LongTypeHandler(false),
+                            new LongTypeHandler(true),
+                            new FloatTypeHandler(false),
+                            new FloatTypeHandler(true),
+                            new DoubleTypeHandler(false),
+                            new DoubleTypeHandler(true),
+                            new BigDecimalTypeHandler(),
+                            new ByteArrayTypeHandler(),
+                            new LocalDateTypeHandler(),
+                            new EnumIntegerIdTypeHandler(),
+                            new EnumLongIdTypeHandler(),
+                            new EnumNameTypeHandler()
+                    );
+    }
+
+    @Bean
+    public RowMapperFactory rowMapperFactory(TieredTypeHandlerList tieredTypeHandlerList) {
         return new CommonClassesRowMapperFactoryAdapter(
-                ReflectiveAutoRegistrationRowMapperFactory.standard()
+                new TypeHandlerRowMapperFactory(tieredTypeHandlerList)
         );
     }
 

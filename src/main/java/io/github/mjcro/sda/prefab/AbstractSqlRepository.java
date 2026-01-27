@@ -20,13 +20,34 @@ public abstract class AbstractSqlRepository {
     private final SqlModifier sqlModifier;
 
     /**
+     * Main constructor.
+     *
+     * @param sqlInvoker   SQL invoker to use for read-only operations.
+     * @param sqlModifier  SQL invoker to user for read-writer operations, optional.
+     * @param timeProvider Current time provider.
+     */
+    public AbstractSqlRepository(
+            @NonNull SqlInvoker sqlInvoker,
+            @Nullable SqlModifier sqlModifier,
+            @Nullable Supplier<Instant> timeProvider
+    ) {
+        this.sqlInvoker = Objects.requireNonNull(sqlInvoker, "sqlInvoker");
+        this.sqlModifier = sqlModifier;
+        this.timeProvider = timeProvider == null ? Instant::now : timeProvider;
+    }
+
+    /**
      * Constructs new abstract SQL repository with given {@link SqlInvoker} or {@link SqlModifier}
      * and default current time provider.
      *
      * @param db Database connection to use, either {@link SqlInvoker} or {@link SqlModifier}.
      */
-    protected AbstractSqlRepository(@NonNull SqlInvoker db) {
-        this(db, null);
+    public AbstractSqlRepository(@NonNull SqlInvoker db) {
+        this(
+                db,
+                db instanceof SqlModifier ? (SqlModifier) db : null,
+                null
+        );
     }
 
     /**
@@ -35,10 +56,12 @@ public abstract class AbstractSqlRepository {
      * @param db           Database connection to use, either {@link SqlInvoker} or {@link SqlModifier}.
      * @param timeProvider Current time provider, optional.
      */
-    protected AbstractSqlRepository(@NonNull SqlInvoker db, @Nullable Supplier<Instant> timeProvider) {
-        this.sqlInvoker = Objects.requireNonNull(db, "db");
-        this.sqlModifier = (db instanceof SqlModifier) ? (SqlModifier) db : null;
-        this.timeProvider = timeProvider == null ? Instant::now : timeProvider;
+    public AbstractSqlRepository(@NonNull SqlInvoker db, @Nullable Supplier<Instant> timeProvider) {
+        this(
+                db,
+                db instanceof SqlModifier ? (SqlModifier) db : null,
+                timeProvider
+        );
     }
 
     /**

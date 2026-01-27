@@ -1,8 +1,8 @@
 package io.github.mjcro.sda;
 
 import io.github.mjcro.interfaces.database.Statement;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,56 +11,56 @@ public class StatementsTest {
     @Test
     public void testOf() {
         Statement statement = Statements.of("Foo", null);
-        Assert.assertTrue(statement instanceof StatementQueryOnly);
-        Assert.assertEquals(statement.getSql(), "Foo");
-        Assert.assertNotNull(statement.getParameters());
-        Assert.assertEquals(statement.getParameters().length, 0);
+        Assertions.assertInstanceOf(StatementQueryOnly.class, statement);
+        Assertions.assertEquals("Foo", statement.getSql());
+        Assertions.assertNotNull(statement.getParameters());
+        Assertions.assertEquals(0, statement.getParameters().length);
 
         statement = Statements.of("Bar", new Object[]{});
-        Assert.assertTrue(statement instanceof StatementQueryOnly);
-        Assert.assertEquals(statement.getSql(), "Bar");
-        Assert.assertNotNull(statement.getParameters());
-        Assert.assertEquals(statement.getParameters().length, 0);
+        Assertions.assertInstanceOf(StatementQueryOnly.class, statement);
+        Assertions.assertEquals("Bar", statement.getSql());
+        Assertions.assertNotNull(statement.getParameters());
+        Assertions.assertEquals(0, statement.getParameters().length);
 
         statement = Statements.of("Baz", new Object[]{2L, "xxx"});
-        Assert.assertTrue(statement instanceof StatementSimple);
-        Assert.assertEquals(statement.getSql(), "Baz");
-        Assert.assertNotNull(statement.getParameters());
-        Assert.assertEquals(statement.getParameters().length, 2);
-        Assert.assertEquals(statement.getParameters()[0], 2L);
-        Assert.assertEquals(statement.getParameters()[1], "xxx");
+        Assertions.assertInstanceOf(StatementSimple.class, statement);
+        Assertions.assertEquals("Baz", statement.getSql());
+        Assertions.assertNotNull(statement.getParameters());
+        Assertions.assertEquals(2, statement.getParameters().length);
+        Assertions.assertEquals(2L, statement.getParameters()[0]);
+        Assertions.assertEquals("xxx", statement.getParameters()[1]);
     }
 
-    @Test(dependsOnMethods = "testOf")
+    @Test
     public void testMatchColumnMySQL() {
         Statement statement = Statements.matchColumn("content", "id", List.of(3, 4, 5))
                 .createStatement(Dialect.MySQL);
 
-        Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `id` IN (?,?,?)");
-        Assert.assertEquals(statement.getParameters()[0], 3);
-        Assert.assertEquals(statement.getParameters()[1], 4);
-        Assert.assertEquals(statement.getParameters()[2], 5);
+        Assertions.assertEquals("SELECT * FROM `content` WHERE `id` IN (?,?,?)", statement.getSql());
+        Assertions.assertEquals(3, statement.getParameters()[0]);
+        Assertions.assertEquals(4, statement.getParameters()[1]);
+        Assertions.assertEquals(5, statement.getParameters()[2]);
 
         statement = Statements.matchColumn("content", "enabled", List.of(false))
                 .createStatement(Dialect.MySQL);
 
-        Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `enabled` = ?");
-        Assert.assertEquals(statement.getParameters()[0], false);
+        Assertions.assertEquals("SELECT * FROM `content` WHERE `enabled` = ?", statement.getSql());
+        Assertions.assertEquals(false, statement.getParameters()[0]);
     }
 
-    @Test(dependsOnMethods = "testOf")
+    @Test
     public void testMatchColumn2MySQL() {
         Statement statement = Statements.matchColumn("content", "id", List.of(3, 4, 5), "enabled", List.of(true))
                 .createStatement(Dialect.MySQL);
 
-        Assert.assertEquals(statement.getSql(), "SELECT * FROM `content` WHERE `id` IN (?,?,?) AND `enabled` = ?");
-        Assert.assertEquals(statement.getParameters()[0], 3);
-        Assert.assertEquals(statement.getParameters()[1], 4);
-        Assert.assertEquals(statement.getParameters()[2], 5);
-        Assert.assertEquals(statement.getParameters()[3], true);
+        Assertions.assertEquals("SELECT * FROM `content` WHERE `id` IN (?,?,?) AND `enabled` = ?", statement.getSql());
+        Assertions.assertEquals(3, statement.getParameters()[0]);
+        Assertions.assertEquals(4, statement.getParameters()[1]);
+        Assertions.assertEquals(5, statement.getParameters()[2]);
+        Assertions.assertEquals(true, statement.getParameters()[3]);
     }
 
-    @Test(dependsOnMethods = "testOf")
+    @Test
     public void testInsert() {
         LinkedHashMap<String, Object> values = new LinkedHashMap<>();
         values.put("id", 33L);
@@ -69,9 +69,9 @@ public class StatementsTest {
         Statement statement = Statements.insert("fooTable", values)
                 .createStatement(Dialect.MySQL);
 
-        Assert.assertEquals(statement.getSql(), "INSERT INTO `fooTable` (`id`,`name`) VALUES (?,?)");
-        Assert.assertEquals(statement.getParameters()[0], 33L);
-        Assert.assertEquals(statement.getParameters()[1], "Fooer");
+        Assertions.assertEquals("INSERT INTO `fooTable` (`id`,`name`) VALUES (?,?)", statement.getSql());
+        Assertions.assertEquals(33L, statement.getParameters()[0]);
+        Assertions.assertEquals("Fooer", statement.getParameters()[1]);
     }
 
     @Test
@@ -80,13 +80,13 @@ public class StatementsTest {
         Statement b = new StatementSimple("SELECT * FROM `user`", new Object[0]);
         Statement c = new StatementSimple("SELECT * FROM `user`", new Object[]{true});
 
-        Assert.assertEquals(a, b);
-        Assert.assertEquals(b, a);
-        Assert.assertEquals(a.hashCode(), b.hashCode());
+        Assertions.assertEquals(a, b);
+        Assertions.assertEquals(b, a);
+        Assertions.assertEquals(a.hashCode(), b.hashCode());
 
-        Assert.assertNotEquals(a, c);
-        Assert.assertNotEquals(b, c);
-        Assert.assertNotEquals(c, a);
-        Assert.assertNotEquals(c, b);
+        Assertions.assertNotEquals(a, c);
+        Assertions.assertNotEquals(b, c);
+        Assertions.assertNotEquals(c, a);
+        Assertions.assertNotEquals(c, b);
     }
 }
