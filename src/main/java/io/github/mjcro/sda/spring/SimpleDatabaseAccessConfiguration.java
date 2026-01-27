@@ -27,6 +27,7 @@ import io.github.mjcro.sda.reflection.LongTypeHandler;
 import io.github.mjcro.sda.reflection.MapperAnnotationTypeHandler;
 import io.github.mjcro.sda.reflection.ShortTypeHandler;
 import io.github.mjcro.sda.reflection.StringTypeHandler;
+import io.github.mjcro.sda.reflection.StrongTypesTypeHandler;
 import io.github.mjcro.sda.reflection.TypeHandlerRowMapperFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +53,7 @@ public class SimpleDatabaseAccessConfiguration {
                     )
                     .addLast(
                             TieredTypeHandlerList.Tier.TYPES,
+                            new StrongTypesTypeHandler(),
                             new StringTypeHandler(),
                             new ByteTypeHandler(false),
                             new ByteTypeHandler(true),
