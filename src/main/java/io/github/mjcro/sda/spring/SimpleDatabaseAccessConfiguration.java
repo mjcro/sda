@@ -23,6 +23,7 @@ import io.github.mjcro.sda.reflection.EnumLongIdTypeHandler;
 import io.github.mjcro.sda.reflection.EnumNameTypeHandler;
 import io.github.mjcro.sda.reflection.FloatTypeHandler;
 import io.github.mjcro.sda.reflection.IntTypeHandler;
+import io.github.mjcro.sda.reflection.LocalDateTypeHandler;
 import io.github.mjcro.sda.reflection.LongTypeHandler;
 import io.github.mjcro.sda.reflection.MapperAnnotationTypeHandler;
 import io.github.mjcro.sda.reflection.ShortTypeHandler;
@@ -69,6 +70,7 @@ public class SimpleDatabaseAccessConfiguration {
                             new DoubleTypeHandler(true),
                             new BigDecimalTypeHandler(),
                             new ByteArrayTypeHandler(),
+                            new LocalDateTypeHandler(),
                             new EnumIntegerIdTypeHandler(),
                             new EnumLongIdTypeHandler(),
                             new EnumNameTypeHandler()

@@ -1,5 +1,8 @@
 package io.github.mjcro.sda.spring;
 
+import io.github.mjcro.interfaces.StrongType;
+import io.github.mjcro.interfaces.ints.StrongInt;
+import io.github.mjcro.interfaces.longs.StrongLong;
 import io.github.mjcro.interfaces.sql.ConnectionProvider;
 import io.github.mjcro.sda.Dialect;
 import io.github.mjcro.sda.TieredTypeHandlerList;
@@ -17,6 +20,7 @@ import org.springframework.context.annotation.Import;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -39,7 +43,11 @@ class SimpleDatabaseAccessConfigurationTest {
                 Arguments.of(double.class),
                 Arguments.of(Double.class),
                 Arguments.of(BigDecimal.class),
-                Arguments.of(byte[].class)
+                Arguments.of(byte[].class),
+                Arguments.of(LocalDate.class),
+                Arguments.of(StrongLongType.class),
+                Arguments.of(StrongIntType.class),
+                Arguments.of(StrongStringType.class)
         );
     }
 
@@ -54,7 +62,8 @@ class SimpleDatabaseAccessConfigurationTest {
         return Stream.of(
                 Arguments.of(boolean.class),
                 Arguments.of(Instant.class),
-                Arguments.of(Duration.class)
+                Arguments.of(Duration.class),
+                Arguments.of(StrongInstantType.class) // Only StrongType<String> supported
         );
     }
 
@@ -76,6 +85,58 @@ class SimpleDatabaseAccessConfigurationTest {
         @Bean
         public ConnectionProvider connectionProvider() {
             return () -> null;
+        }
+    }
+
+    private static class StrongLongType implements StrongLong {
+        private final long x;
+
+        private StrongLongType(long x) {
+            this.x = x;
+        }
+
+        @Override
+        public long value() {
+            return x;
+        }
+    }
+
+    private static class StrongIntType implements StrongInt {
+        private final int x;
+
+        private StrongIntType(int x) {
+            this.x = x;
+        }
+
+        @Override
+        public int value() {
+            return x;
+        }
+    }
+
+    private static class StrongStringType implements StrongType<String> {
+        private final String x;
+
+        private StrongStringType(String x) {
+            this.x = x;
+        }
+
+        @Override
+        public String value() {
+            return x;
+        }
+    }
+
+    private static class StrongInstantType implements StrongType<Instant> {
+        private final Instant x;
+
+        private StrongInstantType(Instant x) {
+            this.x = x;
+        }
+
+        @Override
+        public Instant value() {
+            return x;
         }
     }
 }
