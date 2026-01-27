@@ -1,4 +1,4 @@
-package io.github.mjcro.sda.reflection2;
+package io.github.mjcro.sda.reflection;
 
 import io.github.mjcro.sda.Column;
 import io.github.mjcro.sda.VirtualColumn;
