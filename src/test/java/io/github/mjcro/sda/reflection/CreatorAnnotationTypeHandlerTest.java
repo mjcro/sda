@@ -8,7 +8,7 @@ import io.github.mjcro.sda.reflection.CreatorAnnotationTypeHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class CreatorAnnotationTypeHandlerTest {
+public class CreatorAnnotationTypeHandlerTest {
     @Test
     void testStaticFactoryMethod() throws Exception {
         VirtualResultSet rs = new VirtualResultSet(

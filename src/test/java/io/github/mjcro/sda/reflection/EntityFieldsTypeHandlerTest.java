@@ -35,7 +35,7 @@ import java.sql.ResultSet;
 import java.time.Duration;
 import java.util.AbstractMap;
 
-class EntityFieldsTypeHandlerTest {
+public class EntityFieldsTypeHandlerTest {
     @Test
     void testEntity() throws Exception {
         TieredTypeHandlerList handlerList = new TieredTypeHandlerList();

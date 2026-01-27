@@ -18,7 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 
-class EntityConstructorTypeHandlerTest {
+public class EntityConstructorTypeHandlerTest {
     @Test
     void testEntity() throws SQLException {
         TieredTypeHandlerList handlerList = new TieredTypeHandlerList();
