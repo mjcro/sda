@@ -70,16 +70,6 @@ public class AbstractStoredEntityLongIdSqlRepository<I extends WithId, T, E exte
     }
 
     /**
-     * Extracts long value from identifiers and represents result as java.lang.Object collection.
-     *
-     * @param ids Identifiers.
-     * @return Object collection.
-     */
-    protected Collection<Object> objectify(@NonNull Collection<? extends WithId> ids) {
-        return ids.stream().map(WithId::getId).map($ -> (Object) $).collect(Collectors.toSet());
-    }
-
-    /**
      * Finds all records by identifiers.
      *
      * @param ids Identifiers to match.
@@ -89,7 +79,7 @@ public class AbstractStoredEntityLongIdSqlRepository<I extends WithId, T, E exte
         if (ids == null || ids.isEmpty()) {
             return Collections.emptyList();
         }
-        return fetchList(Statements.matchColumn(getTable(), "id", objectify(ids)));
+        return fetchList(Statements.matchColumn(getTable(), "id", objectifyLongs(ids)));
     }
 
     /**

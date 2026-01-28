@@ -8,8 +8,11 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Abstract class for all SQL-based repositories.
@@ -85,5 +88,31 @@ public abstract class AbstractSqlRepository {
         return sqlModifier instanceof SourceWither<?>
                 ? (SqlModifier) ((SourceWither<?>) sqlModifier).withSource(this)
                 : sqlModifier;
+    }
+
+    /**
+     * Extracts long value from identifiers and represents result as java.lang.Object collection.
+     *
+     * @param ids Identifiers.
+     * @return Object collection.
+     */
+    protected Collection<Object> objectifyLongs(@Nullable Collection<? extends io.github.mjcro.interfaces.longs.WithId> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return ids.stream().map(io.github.mjcro.interfaces.longs.WithId::getId).map($ -> (Object) $).collect(Collectors.toSet());
+    }
+
+    /**
+     * Extracts long value from identifiers and represents result as java.lang.Object collection.
+     *
+     * @param ids Identifiers.
+     * @return Object collection.
+     */
+    protected Collection<Object> objectifyInts(@Nullable Collection<? extends io.github.mjcro.interfaces.ints.WithId> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return ids.stream().map(io.github.mjcro.interfaces.ints.WithId::getId).map($ -> (Object) $).collect(Collectors.toSet());
     }
 }
