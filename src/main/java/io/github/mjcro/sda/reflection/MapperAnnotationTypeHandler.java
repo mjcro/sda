@@ -2,13 +2,11 @@ package io.github.mjcro.sda.reflection;
 
 import io.github.mjcro.sda.Mapper;
 import io.github.mjcro.sda.TypeHandler;
-import io.github.mjcro.sda.VirtualColumn;
+import io.github.mjcro.sda.UnsupportedAnnotatedElementException;
 import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Parameter;
 
 public class MapperAnnotationTypeHandler implements TypeHandler {
     @Override
@@ -27,14 +25,8 @@ public class MapperAnnotationTypeHandler implements TypeHandler {
                 } else if (c.getParameterCount() == 1 && c.getParameters()[0].getType() == Class.class) {
                     // Found constructor requiring Class<?>
                     c.setAccessible(true);
-                    Class<?> clazz;
-                    if (element instanceof VirtualColumn) {
-                        clazz = ((VirtualColumn<?>) element).getType();
-                    } else if (element instanceof Parameter) {
-                        clazz = ((Parameter) element).getType();
-                    } else if (element instanceof Field) {
-                        clazz = ((Field) element).getType();
-                    } else {
+                    Class<?> clazz = ReflectionUtil.getElementType(element);
+                    if (clazz == null) {
                         throw new ReflectiveOperationException("Unable to obtain class data from " + element);
                     }
 
@@ -51,7 +43,7 @@ public class MapperAnnotationTypeHandler implements TypeHandler {
     @Override
     public ValueReader getValueReader(@NonNull AnnotatedElement element) {
         if (!supports(element)) {
-            // TODO throw
+            throw new UnsupportedAnnotatedElementException(this.getClass(), element);
         }
         return buildTypeHandler(element.getAnnotation(Mapper.class), element)
                 .getValueReader(element);
