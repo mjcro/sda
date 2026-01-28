@@ -9,6 +9,10 @@ public class RowMapperException extends DatabaseException {
     }
 
     public RowMapperException(@NonNull Class<?> clazz) {
-        this(String.format("No suitable mapper for clazz %s", clazz.getName()));
+        super(String.format("No suitable mapper for clazz %s", clazz.getName()));
+    }
+
+    public RowMapperException(@NonNull Class<?> clazz, @NonNull Throwable cause) {
+        super(String.format("No suitable mapper for clazz %s", clazz.getName()));
     }
 }
