@@ -37,6 +37,8 @@ public abstract class AbstractSqlRepository {
     }
 
     /**
+     * Secondary simple constructor.
+     * <p>
      * Constructs new abstract SQL repository with given {@link SqlInvoker} or {@link SqlModifier}
      * and default current time provider.
      *
@@ -47,20 +49,6 @@ public abstract class AbstractSqlRepository {
                 db,
                 db instanceof SqlModifier ? (SqlModifier) db : null,
                 null
-        );
-    }
-
-    /**
-     * Constructs new abstract SQL repository with given {@link SqlInvoker} or {@link SqlModifier}
-     *
-     * @param db           Database connection to use, either {@link SqlInvoker} or {@link SqlModifier}.
-     * @param timeProvider Current time provider, optional.
-     */
-    public AbstractSqlRepository(@NonNull SqlInvoker db, @Nullable Supplier<Instant> timeProvider) {
-        this(
-                db,
-                db instanceof SqlModifier ? (SqlModifier) db : null,
-                timeProvider
         );
     }
 
