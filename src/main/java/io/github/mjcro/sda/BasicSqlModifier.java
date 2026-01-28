@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.OptionalLong;
+import java.util.Optional;
 
 /**
  * Basic implementation of {@link SqlModifier}.
@@ -59,7 +59,7 @@ public class BasicSqlModifier implements SqlModifier, SourceWither<SqlModifier> 
     }
 
     @Override
-    public @NonNull OptionalLong modify(@NonNull String sql, @Nullable Object @Nullable [] parameters) {
+    public @NonNull Optional<Long> modify(@NonNull String sql, @Nullable Object @Nullable [] parameters) {
         long nano = System.nanoTime();
         try (Connection connection = basicSqlInvoker.getConnection()) {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
@@ -70,11 +70,11 @@ public class BasicSqlModifier implements SqlModifier, SourceWither<SqlModifier> 
                     if (generatedKeys != null && generatedKeys.isBeforeFirst()) {
                         generatedKeys.next();
                         basicSqlInvoker.finishSqlTraceNano(sql, parameters, nano, null);
-                        return OptionalLong.of(generatedKeys.getLong(1));
+                        return Optional.of(generatedKeys.getLong(1));
                     }
                 }
                 basicSqlInvoker.finishSqlTraceNano(sql, parameters, nano, null);
-                return OptionalLong.of(affected);
+                return Optional.of((long) affected);
             }
         } catch (SQLException e) {
             DatabaseException converted = getDialect().convertException(e);
