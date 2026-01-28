@@ -75,7 +75,7 @@ public class AbstractStoredEntityLongIdSqlRepository<I extends WithId, T, E exte
      * @param ids Identifiers.
      * @return Object collection.
      */
-    protected Collection<Object> objectify(@NonNull Collection<I> ids) {
+    protected Collection<Object> objectify(@NonNull Collection<? extends WithId> ids) {
         return ids.stream().map(WithId::getId).map($ -> (Object) $).collect(Collectors.toSet());
     }
 
