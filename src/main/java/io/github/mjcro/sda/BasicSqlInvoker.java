@@ -133,6 +133,7 @@ public class BasicSqlInvoker implements SqlInvoker, SourceWither<SqlInvoker> {
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (!resultSet.isBeforeFirst()) {
+                        finishSqlTraceNano(sql, parameters, nano, null);
                         return List.of(); // No data
                     }
                     ArrayList<T> list = new ArrayList<>();
