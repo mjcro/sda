@@ -103,4 +103,16 @@ public class MySqlUtilTest {
         Assertions.assertEquals("bar", p[2]);
         Assertions.assertEquals(11L, p[3]);
     }
+
+    @Test
+    void deleteByColumn() {
+        Statement stmt = MySqlUtil.deleteByColumn("xxx", "xid", 122L);
+        Assertions.assertEquals(
+                "DELETE FROM `xxx` WHERE `xid`=?",
+                stmt.getSql()
+        );
+        Object[] p = stmt.getParameters();
+        Assertions.assertEquals(1, p.length);
+        Assertions.assertEquals(122L, p[0]);
+    }
 }

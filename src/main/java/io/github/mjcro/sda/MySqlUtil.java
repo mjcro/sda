@@ -15,25 +15,6 @@ public class MySqlUtil {
     private MySqlUtil() {
     }
 
-//    /**
-//     * Writes placeholder marks (?) comma-separated into
-//     * given string builder.
-//     *
-//     * @param sb    String builder to write data into.
-//     * @param times Repeat count.
-//     */
-//    public static void writePlaceholders(@NonNull StringBuilder sb, int times) {
-//        boolean first = true;
-//        for (int i = 0; i < times; i++) {
-//            if (first) {
-//                first = false;
-//            } else {
-//                sb.append(",");
-//            }
-//            sb.append("?");
-//        }
-//    }
-
     public static void writeEqOrIn(@NonNull StringBuilder sb, @NonNull Collection<?> collection) {
         if (collection.size() == 1) {
             sb.append("=?");
@@ -152,6 +133,24 @@ public class MySqlUtil {
                 sb.append("=?");
                 ph.add(e.getValue());
             }
+            sb.append(" WHERE ");
+            MySqlNameWriter.INSTANCE.writeTo(sb, columnName);
+            sb.append("=?");
+            ph.add(columnValue);
+        });
+    }
+
+    static @NonNull Statement deleteByColumn(
+            @NonNull String table,
+            @NonNull String columnName,
+            @NonNull Object columnValue
+    ) {
+        Objects.requireNonNull(table, "table");
+        Objects.requireNonNull(columnName, "columnName");
+
+        return Statements.build((sb, ph) -> {
+            sb.append("DELETE FROM ");
+            MySqlNameWriter.INSTANCE.writeTo(sb, table);
             sb.append(" WHERE ");
             MySqlNameWriter.INSTANCE.writeTo(sb, columnName);
             sb.append("=?");

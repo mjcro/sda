@@ -126,6 +126,27 @@ public class Statements {
     }
 
     /**
+     * Constructs statement prototype containing DELETE ... WHERE x=? statement.
+     *
+     * @param table       Table to update data in.
+     * @param columnName  Column name.
+     * @param columnValue Column value.
+     * @return Statement prototype.
+     */
+    public static @NonNull StatementPrototype deleteByColumn(
+            @NonNull String table,
+            @NonNull String columnName,
+            @NonNull Object columnValue
+    ) {
+        return dialect -> {
+            if (dialect.isCompatibleWith(Dialect.MySQL)) {
+                return MySqlUtil.deleteByColumn(table, columnName, columnValue);
+            }
+            throw new UnsupportedDialectException(dialect);
+        };
+    }
+
+    /**
      * Returns true if both statements has same query and parameters.
      *
      * @param a First statement.
