@@ -3,6 +3,7 @@ package io.github.mjcro.sda;
 import io.github.mjcro.sda.exceptions.ConstraintViolationException;
 import io.github.mjcro.sda.exceptions.DeadlockException;
 import io.github.mjcro.sda.exceptions.SchemaNotFoundException;
+import io.github.mjcro.sda.exceptions.TimeoutException;
 import org.jspecify.annotations.NonNull;
 
 import java.sql.SQLException;
@@ -24,6 +25,8 @@ class DialectMySql implements Dialect {
                 return new ConstraintViolationException(source);
             case 1146: // MysqlErrorNumbers.ER_NO_SUCH_TABLE
                 return new SchemaNotFoundException(source);
+            case 3024: // MysqlErrorNumbers.ER_QUERY_TIMEOUT
+                return new TimeoutException(source);
             default:
                 return new DatabaseException(source);
         }
