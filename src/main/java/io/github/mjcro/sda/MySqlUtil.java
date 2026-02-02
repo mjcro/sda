@@ -15,33 +15,31 @@ public class MySqlUtil {
     private MySqlUtil() {
     }
 
-    private static final MySqlNameWriter nameWriter = new MySqlNameWriter();
-
-    /**
-     * Writes placeholder marks (?) comma-separated into
-     * given string builder.
-     *
-     * @param sb    String builder to write data into.
-     * @param times Repeat count.
-     */
-    public static void writePlaceholders(@NonNull StringBuilder sb, int times) {
-        boolean first = true;
-        for (int i = 0; i < times; i++) {
-            if (first) {
-                first = false;
-            } else {
-                sb.append(",");
-            }
-            sb.append("?");
-        }
-    }
+//    /**
+//     * Writes placeholder marks (?) comma-separated into
+//     * given string builder.
+//     *
+//     * @param sb    String builder to write data into.
+//     * @param times Repeat count.
+//     */
+//    public static void writePlaceholders(@NonNull StringBuilder sb, int times) {
+//        boolean first = true;
+//        for (int i = 0; i < times; i++) {
+//            if (first) {
+//                first = false;
+//            } else {
+//                sb.append(",");
+//            }
+//            sb.append("?");
+//        }
+//    }
 
     public static void writeEqOrIn(@NonNull StringBuilder sb, @NonNull Collection<?> collection) {
         if (collection.size() == 1) {
-            sb.append(" = ?");
+            sb.append("=?");
         } else {
             sb.append(" IN (");
-            writePlaceholders(sb, collection.size());
+            PlaceholdersWriter.QUESTIONS.writeTo(sb, collection.size());
             sb.append(")");
         }
     }
@@ -53,11 +51,7 @@ public class MySqlUtil {
      * @return Escaped name.
      */
     public static @NonNull String name(@NonNull String name) {
-        return nameWriter.asString(name);
-    }
-
-    static void writeNameTo(@NonNull StringBuilder sb, @NonNull String name) {
-        nameWriter.writeTo(sb, name);
+        return MySqlNameWriter.INSTANCE.asString(name);
     }
 
     static @NonNull Statement matchColumn(
@@ -71,9 +65,9 @@ public class MySqlUtil {
 
         return Statements.build((sb, ph) -> {
             sb.append("SELECT * FROM ");
-            writeNameTo(sb, table);
+            MySqlNameWriter.INSTANCE.writeTo(sb, table);
             sb.append(" WHERE ");
-            writeNameTo(sb, column);
+            MySqlNameWriter.INSTANCE.writeTo(sb, column);
             writeEqOrIn(sb, identifiers);
             ph.addAll(identifiers);
         });
@@ -94,14 +88,14 @@ public class MySqlUtil {
 
         return Statements.build((sb, ph) -> {
             sb.append("SELECT * FROM ");
-            writeNameTo(sb, table);
+            MySqlNameWriter.INSTANCE.writeTo(sb, table);
             sb.append(" WHERE ");
 
-            writeNameTo(sb, columnOne);
+            MySqlNameWriter.INSTANCE.writeTo(sb, columnOne);
             writeEqOrIn(sb, identifiersOne);
 
             sb.append(" AND ");
-            writeNameTo(sb, columnTwo);
+            MySqlNameWriter.INSTANCE.writeTo(sb, columnTwo);
             writeEqOrIn(sb, identifiersTwo);
             ph.addAll(identifiersOne);
             ph.addAll(identifiersTwo);
@@ -117,7 +111,7 @@ public class MySqlUtil {
 
         return Statements.build((sb, ph) -> {
             sb.append("INSERT INTO ");
-            writeNameTo(sb, table);
+            MySqlNameWriter.INSTANCE.writeTo(sb, table);
             sb.append(" (");
             boolean first = true;
             for (Map.Entry<String, Object> entry : values.entrySet()) {
@@ -126,12 +120,42 @@ public class MySqlUtil {
                 } else {
                     sb.append(",");
                 }
-                writeNameTo(sb, entry.getKey());
+                MySqlNameWriter.INSTANCE.writeTo(sb, entry.getKey());
                 ph.add(entry.getValue());
             }
             sb.append(") VALUES (");
-            writePlaceholders(sb, values.size());
+            PlaceholdersWriter.QUESTIONS.writeTo(sb, values.size());
             sb.append(")");
+        });
+    }
+
+    static @NonNull Statement updateByColumn(
+            @NonNull String table,
+            @NonNull String columnName,
+            @NonNull Object columnValue,
+            @NonNull Map<String, Object> values
+    ) {
+        Objects.requireNonNull(table, "table");
+        Objects.requireNonNull(columnName, "columnName");
+        Objects.requireNonNull(values, "values");
+
+        return Statements.build((sb, ph) -> {
+            sb.append("UPDATE ");
+            MySqlNameWriter.INSTANCE.writeTo(sb, table);
+            sb.append(" SET ");
+            int i = 0;
+            for (Map.Entry<String, Object> e : values.entrySet()) {
+                if (i++ > 0) {
+                    sb.append(",");
+                }
+                MySqlNameWriter.INSTANCE.writeTo(sb, e.getKey());
+                sb.append("=?");
+                ph.add(e.getValue());
+            }
+            sb.append(" WHERE ");
+            MySqlNameWriter.INSTANCE.writeTo(sb, columnName);
+            sb.append("=?");
+            ph.add(columnValue);
         });
     }
 }

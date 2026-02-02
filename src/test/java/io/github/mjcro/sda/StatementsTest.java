@@ -44,7 +44,7 @@ public class StatementsTest {
         statement = Statements.matchColumn("content", "enabled", List.of(false))
                 .createStatement(Dialect.MySQL);
 
-        Assertions.assertEquals("SELECT * FROM `content` WHERE `enabled` = ?", statement.getSql());
+        Assertions.assertEquals("SELECT * FROM `content` WHERE `enabled`=?", statement.getSql());
         Assertions.assertEquals(false, statement.getParameters()[0]);
     }
 
@@ -53,7 +53,7 @@ public class StatementsTest {
         Statement statement = Statements.matchColumn("content", "id", List.of(3, 4, 5), "enabled", List.of(true))
                 .createStatement(Dialect.MySQL);
 
-        Assertions.assertEquals("SELECT * FROM `content` WHERE `id` IN (?,?,?) AND `enabled` = ?", statement.getSql());
+        Assertions.assertEquals("SELECT * FROM `content` WHERE `id` IN (?,?,?) AND `enabled`=?", statement.getSql());
         Assertions.assertEquals(3, statement.getParameters()[0]);
         Assertions.assertEquals(4, statement.getParameters()[1]);
         Assertions.assertEquals(5, statement.getParameters()[2]);

@@ -103,6 +103,29 @@ public class Statements {
     }
 
     /**
+     * Constructs statement prototype containing UPDATE ... WHERE x=? statement.
+     *
+     * @param table       Table to update data in.
+     * @param columnName  Column name.
+     * @param columnValue Column value.
+     * @param values      Values to update.
+     * @return Statement prototype.
+     */
+    public static @NonNull StatementPrototype updateByColumn(
+            @NonNull String table,
+            @NonNull String columnName,
+            @NonNull Object columnValue,
+            @NonNull Map<String, Object> values
+    ) {
+        return dialect -> {
+            if (dialect.isCompatibleWith(Dialect.MySQL)) {
+                return MySqlUtil.updateByColumn(table, columnName, columnValue, values);
+            }
+            throw new UnsupportedDialectException(dialect);
+        };
+    }
+
+    /**
      * Returns true if both statements has same query and parameters.
      *
      * @param a First statement.
