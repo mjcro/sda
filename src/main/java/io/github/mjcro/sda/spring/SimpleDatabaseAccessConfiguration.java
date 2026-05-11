@@ -32,58 +32,14 @@ import io.github.mjcro.sda.reflection.StrongTypesTypeHandler;
 import io.github.mjcro.sda.reflection.TypeHandlerRowMapperFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import javax.sql.DataSource;
 import java.util.function.Supplier;
 
 @Configuration
+@Import(RowMapperFactoryConfiguration.class)
 public class SimpleDatabaseAccessConfiguration {
-    @Bean
-    public TieredTypeHandlerList tieredTypeHandlerList() {
-        TieredTypeHandlerList list = new TieredTypeHandlerList();
-            return list
-                    .addLast(
-                            TieredTypeHandlerList.Tier.ENTITY_CONSTRUCTORS,
-                            new EntityFieldsTypeHandler(list),
-                            new EntityConstructorTypeHandler(list)
-                    )
-                    .addLast(
-                            TieredTypeHandlerList.Tier.ANNOTATION_PROCESSORS,
-                            new MapperAnnotationTypeHandler(),
-                            new CreatorAnnotationTypeHandler()
-                    )
-                    .addLast(
-                            TieredTypeHandlerList.Tier.TYPES,
-                            new StrongTypesTypeHandler(),
-                            new StringTypeHandler(),
-                            new ByteTypeHandler(false),
-                            new ByteTypeHandler(true),
-                            new ShortTypeHandler(false),
-                            new ShortTypeHandler(true),
-                            new IntTypeHandler(false),
-                            new IntTypeHandler(true),
-                            new LongTypeHandler(false),
-                            new LongTypeHandler(true),
-                            new FloatTypeHandler(false),
-                            new FloatTypeHandler(true),
-                            new DoubleTypeHandler(false),
-                            new DoubleTypeHandler(true),
-                            new BigDecimalTypeHandler(),
-                            new ByteArrayTypeHandler(),
-                            new LocalDateTypeHandler(),
-                            new EnumIntegerIdTypeHandler(),
-                            new EnumLongIdTypeHandler(),
-                            new EnumNameTypeHandler()
-                    );
-    }
-
-    @Bean
-    public RowMapperFactory rowMapperFactory(TieredTypeHandlerList tieredTypeHandlerList) {
-        return new CommonClassesRowMapperFactoryAdapter(
-                new TypeHandlerRowMapperFactory(tieredTypeHandlerList)
-        );
-    }
-
     @Bean
     public SqlModifier sqlModifier(
             RowMapperFactory factory,
