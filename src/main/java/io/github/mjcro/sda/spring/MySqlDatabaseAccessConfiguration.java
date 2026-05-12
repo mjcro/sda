@@ -10,6 +10,11 @@ import org.springframework.context.annotation.Import;
 import javax.sql.DataSource;
 import java.util.function.Supplier;
 
+/**
+ * Spring configuration wiring a MySQL-flavored database access stack: dialect supplier
+ * and a {@link DataSource} built from {@code mysql.*} properties.
+ * Imports {@link SimpleDatabaseAccessConfiguration} for the rest of the beans.
+ */
 @Configuration
 @Import(SimpleDatabaseAccessConfiguration.class)
 public class MySqlDatabaseAccessConfiguration {

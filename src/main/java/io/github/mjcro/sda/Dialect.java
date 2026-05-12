@@ -11,9 +11,20 @@ import java.sql.SQLException;
  */
 @FunctionalInterface
 public interface Dialect {
+    /**
+     * Predefined H2 dialect instance.
+     */
     Dialect H2 = new DialectH2();
+    /**
+     * Predefined MySQL dialect instance.
+     */
     Dialect MySQL = new DialectMySql();
 
+    /**
+     * Returns human-readable dialect name (e.g. "MySQL", "H2"). Never null.
+     *
+     * @return Dialect name.
+     */
     String getName();
 
     /**

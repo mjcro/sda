@@ -8,6 +8,11 @@ import org.jspecify.annotations.NonNull;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 
+/**
+ * {@link TypeHandler} that honors the {@link Mapper} annotation: it instantiates
+ * the handler class declared by the annotation (preferring a no-arg constructor,
+ * falling back to a single-{@code Class<?>} constructor) and delegates to it.
+ */
 public class MapperAnnotationTypeHandler implements TypeHandler {
     @Override
     public boolean supports(@NonNull AnnotatedElement element) {

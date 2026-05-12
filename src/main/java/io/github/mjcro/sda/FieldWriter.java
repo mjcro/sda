@@ -5,6 +5,11 @@ import org.jspecify.annotations.NonNull;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Writes a single value, read from a {@link ResultSet}, into a target object.
+ *
+ * @param <T> Target object type.
+ */
 public interface FieldWriter<T> {
     /**
      * Writes data from result set to target object.

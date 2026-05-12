@@ -9,9 +9,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
 import java.util.Objects;
 
+/**
+ * Builds entities by invoking the single declared constructor and resolving each parameter
+ * via a delegated {@link TypeHandler}. Requires the entity to have exactly one constructor
+ * with at least one parameter.
+ */
 public class EntityConstructorTypeHandler implements TypeHandler {
     private final TypeHandler parameterTypeHandler;
 
+    /**
+     * @param parameterTypeHandler Handler used to resolve readers for individual constructor parameters. Not null.
+     */
     public EntityConstructorTypeHandler(@NonNull TypeHandler parameterTypeHandler) {
         this.parameterTypeHandler = Objects.requireNonNull(parameterTypeHandler, "parameterTypeHandler");
     }

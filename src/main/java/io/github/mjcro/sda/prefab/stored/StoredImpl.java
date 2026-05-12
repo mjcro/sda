@@ -5,6 +5,12 @@ import org.jspecify.annotations.NonNull;
 
 import java.time.Instant;
 
+/**
+ * Default immutable {@link Stored} implementation.
+ *
+ * @param <I> Identifier type.
+ * @param <T> Domain value type.
+ */
 class StoredImpl<I, T> implements Stored<I, T> {
     private final I id;
     private final State state;

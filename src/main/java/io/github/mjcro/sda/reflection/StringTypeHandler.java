@@ -4,6 +4,9 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
+/**
+ * Reads {@link String} columns via {@link java.sql.ResultSet#getString(String)}.
+ */
 public class StringTypeHandler extends AbstractSimpleColumnTypeHandler {
     @Override
     protected boolean supports(@NonNull Class<?> clazz) {

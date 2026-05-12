@@ -5,6 +5,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Duration;
 
+/**
+ * Observability hook that receives a callback after every SQL invocation
+ * performed by an {@link SqlInvoker}. Used for logging, metrics, and tracing.
+ */
 public interface SqlTracer {
     /**
      * Method invoked on successful or erroneous query invocation.

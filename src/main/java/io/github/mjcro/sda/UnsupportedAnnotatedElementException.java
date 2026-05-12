@@ -5,7 +5,14 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Thrown when a {@link TypeHandler} is asked to handle an {@link AnnotatedElement} it does not support.
+ */
 public class UnsupportedAnnotatedElementException extends IllegalStateException {
+    /**
+     * @param typeHandlerClass Handler class that refused the element. May be null.
+     * @param element          Rejected element. May be null.
+     */
     public UnsupportedAnnotatedElementException(
             Class<? extends TypeHandler> typeHandlerClass,
             AnnotatedElement element
@@ -22,6 +29,14 @@ public class UnsupportedAnnotatedElementException extends IllegalStateException 
         super(message);
     }
 
+    /**
+     * Builds an exception with a detailed multi-line message based on reasons collected from the explainer.
+     *
+     * @param explainer Handler implementing {@link UnsupportedTypeHandlerExplainer}. Not null.
+     * @param element   Rejected element. Not null.
+     * @param <T>       Handler type.
+     * @return New exception instance, not null.
+     */
     public static <T extends TypeHandler & UnsupportedTypeHandlerExplainer> UnsupportedAnnotatedElementException forExplainer(
             T explainer,
             AnnotatedElement element

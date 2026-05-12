@@ -6,6 +6,10 @@ import org.jspecify.annotations.Nullable;
 import java.lang.reflect.AnnotatedElement;
 import java.sql.ResultSet;
 
+/**
+ * Resolves how a single annotated element (field, constructor parameter, etc.)
+ * should be read from a {@link ResultSet}.
+ */
 public interface TypeHandler {
     /**
      * Analyzes if given type handler can handle class for given annotated element.

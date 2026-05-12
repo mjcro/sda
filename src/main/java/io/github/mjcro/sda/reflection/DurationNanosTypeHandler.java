@@ -5,6 +5,9 @@ import org.jspecify.annotations.NonNull;
 import java.time.Duration;
 import java.util.Objects;
 
+/**
+ * Reads {@link Duration} from a long column expressed in nanoseconds.
+ */
 public class DurationNanosTypeHandler extends AbstractSimpleColumnTypeHandler {
     @Override
     protected boolean supports(@NonNull Class<?> clazz) {

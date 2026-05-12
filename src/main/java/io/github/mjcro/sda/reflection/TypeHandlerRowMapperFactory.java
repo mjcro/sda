@@ -14,10 +14,17 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * {@link RowMapperFactory} that resolves mappers via a {@link TieredTypeHandlerList}.
+ * Generated mappers are cached per class.
+ */
 public class TypeHandlerRowMapperFactory implements RowMapperFactory {
     private final TieredTypeHandlerList handlerList;
     private final ConcurrentHashMap<Class<?>, RowMapper<?>> rowMappers = new ConcurrentHashMap<>();
 
+    /**
+     * @param handlerList Source of type handlers. Not null.
+     */
     public TypeHandlerRowMapperFactory(@NonNull TieredTypeHandlerList handlerList) {
         this.handlerList = Objects.requireNonNull(handlerList, "handlerList");
     }

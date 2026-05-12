@@ -39,6 +39,18 @@ public interface Stored<I, T> {
      */
     @NonNull Instant updatedAt();
 
+    /**
+     * Factory constructing a {@link Stored} instance.
+     *
+     * @param id        Identifier. Not null.
+     * @param state     Lifecycle state. Not null.
+     * @param createdAt Creation time. Not null.
+     * @param updatedAt Last update time. Null falls back to {@code createdAt}.
+     * @param value     Domain value. Not null.
+     * @param <I>       Identifier type.
+     * @param <T>       Domain object type.
+     * @return Stored instance, not null.
+     */
     static <I, T> Stored<I, T> of(
             @NonNull I id,
             @NonNull State state,
@@ -55,6 +67,17 @@ public interface Stored<I, T> {
         );
     }
 
+    /**
+     * Factory constructing a {@link Stored} instance where update time equals creation time.
+     *
+     * @param id        Identifier. Not null.
+     * @param state     Lifecycle state. Not null.
+     * @param createdAt Creation time. Not null.
+     * @param value     Domain value. Not null.
+     * @param <I>       Identifier type.
+     * @param <T>       Domain object type.
+     * @return Stored instance, not null.
+     */
     static <I, T> Stored<I, T> of(
             @NonNull I id,
             @NonNull State state,
@@ -71,6 +94,11 @@ public interface Stored<I, T> {
      * @param <T> Domain type.
      */
     interface Convertible<I, T> {
+        /**
+         * Converts this object into its {@link Stored} representation.
+         *
+         * @return Stored representation, not null.
+         */
         @NonNull Stored<I, T> convert();
     }
 }

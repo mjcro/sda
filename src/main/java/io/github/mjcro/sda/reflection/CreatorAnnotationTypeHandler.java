@@ -11,6 +11,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+/**
+ * Reads a column and builds an entity through a method or constructor annotated with
+ * {@link Creator}. The creator must accept a single argument of one of:
+ * {@link String}, {@code int}/{@link Integer} or {@code long}/{@link Long}.
+ */
 public class CreatorAnnotationTypeHandler extends AbstractColumnTypeHandler {
     @Override
     public boolean supports(@NonNull Class<?> clazz) {

@@ -4,9 +4,16 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
+/**
+ * Reads {@code byte}/{@link Byte} columns. Throws {@link ScalarNullException} when SQL NULL
+ * is read into the unboxed variant.
+ */
 public class ByteTypeHandler extends AbstractSimpleColumnTypeHandler {
     private final boolean boxed;
 
+    /**
+     * @param boxed True for {@link Byte}, false for {@code byte}.
+     */
     public ByteTypeHandler(boolean boxed) {
         this.boxed = boxed;
     }

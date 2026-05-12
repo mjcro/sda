@@ -13,6 +13,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+/**
+ * Base class for repositories that always read a fixed entity type.
+ * Provides convenience helpers binding the entity class to the underlying {@link SqlInvoker}.
+ *
+ * @param <E> Entity type.
+ */
 public abstract class AbstractEntitySqlRepository<E> extends AbstractSqlRepository {
     private final Class<E> entityClass;
 

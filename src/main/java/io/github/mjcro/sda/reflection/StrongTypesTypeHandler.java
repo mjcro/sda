@@ -9,6 +9,11 @@ import org.jspecify.annotations.NonNull;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * Reads a column into a strong-typed value: {@link StrongLong}, {@link StrongInt},
+ * or a {@link StrongType} whose {@code value()} returns {@link String}.
+ * The target class must declare a constructor accepting the underlying primitive/String.
+ */
 public class StrongTypesTypeHandler extends AbstractColumnTypeHandler {
     @Override
     protected boolean supports(@NonNull Class<?> clazz) {

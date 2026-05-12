@@ -12,6 +12,12 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/**
+ * Standard {@link ValuesBuilder} implementation backed by a {@link HashMap}.
+ * Automatically unwraps {@link Optional} and {@code Strong*} typed values on put.
+ *
+ * @param <T> Self type (curiously recurring) for fluent chaining in subclasses.
+ */
 public class StdValuesBuilder<T extends StdValuesBuilder<T>> implements ValuesBuilder<T> {
     private final HashMap<String, Object> values = new HashMap<>();
 

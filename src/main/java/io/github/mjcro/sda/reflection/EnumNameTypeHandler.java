@@ -5,6 +5,9 @@ import org.jspecify.annotations.NonNull;
 import java.util.HashMap;
 import java.util.Locale;
 
+/**
+ * Reads an enum constant by its name (case-insensitive) from a string column.
+ */
 public class EnumNameTypeHandler extends AbstractColumnTypeHandler {
     @Override
     protected boolean supports(@NonNull Class<?> clazz) {

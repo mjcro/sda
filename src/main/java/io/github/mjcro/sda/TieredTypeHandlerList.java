@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Composite {@link TypeHandler} that probes registered handlers in a fixed priority order:
+ * entity constructors first, then annotation processors, then generic type handlers.
+ * The first handler whose {@link TypeHandler#supports} returns true wins.
+ */
 public class TieredTypeHandlerList implements TypeHandler, UnsupportedTypeHandlerExplainer {
     private final LinkedList<TypeHandler>
             ecHandlers = new LinkedList<>(),
@@ -58,6 +63,13 @@ public class TieredTypeHandlerList implements TypeHandler, UnsupportedTypeHandle
         return null;
     }
 
+    /**
+     * Prepends handlers to the given tier; the last one prepended is probed first.
+     *
+     * @param tier     Target tier, not null.
+     * @param handlers Handlers to add, not null.
+     * @return Self, for chaining.
+     */
     public TieredTypeHandlerList addFirst(@NonNull Tier tier, @NonNull TypeHandler... handlers) {
         LinkedList<TypeHandler> target = ttHandlers;
         switch (tier) {
@@ -77,6 +89,13 @@ public class TieredTypeHandlerList implements TypeHandler, UnsupportedTypeHandle
         return this;
     }
 
+    /**
+     * Appends handlers to the given tier; they will be probed after all previously registered ones.
+     *
+     * @param tier     Target tier, not null.
+     * @param handlers Handlers to add, not null.
+     * @return Self, for chaining.
+     */
     public TieredTypeHandlerList addLast(@NonNull Tier tier, @NonNull TypeHandler... handlers) {
         LinkedList<TypeHandler> target = ttHandlers;
         switch (tier) {
@@ -96,9 +115,21 @@ public class TieredTypeHandlerList implements TypeHandler, UnsupportedTypeHandle
         return this;
     }
 
+    /**
+     * Priority groups used when resolving a handler. Probed top-down in declaration order.
+     */
     public enum Tier {
+        /**
+         * Handlers that materialize whole entities via constructors.
+         */
         ENTITY_CONSTRUCTORS,
+        /**
+         * Handlers driven by annotations on the element (e.g. {@link Mapper}).
+         */
         ANNOTATION_PROCESSORS,
+        /**
+         * Plain type-based handlers (one Java type → one handler).
+         */
         TYPES
     }
 }

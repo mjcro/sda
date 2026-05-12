@@ -10,6 +10,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+/**
+ * Static factory methods and helpers for building {@link Statement} and
+ * {@link StatementPrototype} instances.
+ */
 public class Statements {
     /**
      * Constructs new statement instance for given query and parameters.

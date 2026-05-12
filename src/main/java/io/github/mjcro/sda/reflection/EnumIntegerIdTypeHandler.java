@@ -5,6 +5,9 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 
+/**
+ * Reads an enum constant by its int id (from {@link WithId}) from an integer column.
+ */
 public class EnumIntegerIdTypeHandler extends AbstractColumnTypeHandler {
     @Override
     protected boolean supports(@NonNull Class<?> clazz) {

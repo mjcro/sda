@@ -4,9 +4,16 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
+/**
+ * Reads {@code long}/{@link Long} columns. Throws {@link ScalarNullException} when SQL NULL
+ * is read into the unboxed variant.
+ */
 public class LongTypeHandler extends AbstractSimpleColumnTypeHandler {
     private final boolean boxed;
 
+    /**
+     * @param boxed True for {@link Long}, false for {@code long}.
+     */
     public LongTypeHandler(boolean boxed) {
         this.boxed = boxed;
     }

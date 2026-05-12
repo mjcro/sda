@@ -14,16 +14,14 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Type handler building entity by setting fields values.
- * Requires empty constructor to work.
+ * Builds entities by invoking the no-arg constructor and assigning each declared field
+ * via a reader resolved by a delegated {@link TypeHandler}. Requires exactly one no-arg constructor.
  */
 public class EntityFieldsTypeHandler implements TypeHandler, UnsupportedTypeHandlerExplainer {
     private final TypeHandler fieldTypeHandler;
 
     /**
-     * Constructor.
-     *
-     * @param fieldTypeHandler Type handler to resolve type handlers for fields.
+     * @param fieldTypeHandler Handler used to resolve readers for individual fields. Not null.
      */
     public EntityFieldsTypeHandler(@NonNull TypeHandler fieldTypeHandler) {
         this.fieldTypeHandler = Objects.requireNonNull(fieldTypeHandler, "fieldTypeHandler");

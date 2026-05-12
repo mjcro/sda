@@ -1,5 +1,8 @@
 package io.github.mjcro.sda;
 
+/**
+ * Immutable {@link Paging} implementation validating page and limit on construction.
+ */
 class PagingImpl implements Paging {
     private final int page;
     private final int limit;

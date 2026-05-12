@@ -3,6 +3,10 @@ package io.github.mjcro.sda;
 import io.github.mjcro.interfaces.database.Statement;
 import org.jspecify.annotations.NonNull;
 
+/**
+ * Dialect-aware SQL statement builder. Produces a concrete {@link Statement}
+ * tailored to the requested {@link Dialect}.
+ */
 @FunctionalInterface
 public interface StatementPrototype {
     /**

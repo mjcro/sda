@@ -4,9 +4,16 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
+/**
+ * Reads {@code float}/{@link Float} columns. Throws {@link ScalarNullException} when SQL NULL
+ * is read into the unboxed variant.
+ */
 public class FloatTypeHandler extends AbstractSimpleColumnTypeHandler {
     private final boolean boxed;
 
+    /**
+     * @param boxed True for {@link Float}, false for {@code float}.
+     */
     public FloatTypeHandler(boolean boxed) {
         this.boxed = boxed;
     }

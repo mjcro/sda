@@ -25,6 +25,11 @@ import io.github.mjcro.sda.reflection.TypeHandlerRowMapperFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Spring configuration exposing a ready-to-use {@link RowMapperFactory} bean
+ * backed by a pre-populated {@link TieredTypeHandlerList} (annotation, scalar,
+ * enum, strong-type and entity-construction handlers).
+ */
 @Configuration
 public class RowMapperFactoryConfiguration {
     @Bean

@@ -37,6 +37,11 @@ import org.springframework.context.annotation.Import;
 import javax.sql.DataSource;
 import java.util.function.Supplier;
 
+/**
+ * Spring configuration wiring the dialect-agnostic part of the database stack:
+ * {@link SqlInvoker}, {@link SqlModifier}, {@link ConnectionProvider} and a no-op {@link SqlTracer}.
+ * A {@code DataSource} and {@code Supplier<Dialect>} must be provided externally.
+ */
 @Configuration
 @Import(RowMapperFactoryConfiguration.class)
 public class SimpleDatabaseAccessConfiguration {

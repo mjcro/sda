@@ -20,6 +20,14 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * Base SQL repository for entities identified by a long primary key, where the
+ * underlying row entity converts itself into a {@link Stored} record on read.
+ *
+ * @param <I> Identifier type implementing {@link WithId}.
+ * @param <T> Domain value type.
+ * @param <E> Row entity type implementing {@link Stored.Convertible}.
+ */
 public class AbstractStoredEntityLongIdSqlRepository<I extends WithId, T, E extends Stored.Convertible<I, T>> extends AbstractEntitySqlRepository<E> {
     private final String table;
 

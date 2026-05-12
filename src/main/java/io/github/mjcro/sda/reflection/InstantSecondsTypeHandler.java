@@ -5,6 +5,9 @@ import org.jspecify.annotations.NonNull;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Reads {@link Instant} from a column storing Unix epoch seconds as a long.
+ */
 public class InstantSecondsTypeHandler extends AbstractSimpleColumnTypeHandler {
     @Override
     protected boolean supports(@NonNull Class<?> clazz) {

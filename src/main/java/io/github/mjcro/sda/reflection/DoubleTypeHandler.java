@@ -4,9 +4,16 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
+/**
+ * Reads {@code double}/{@link Double} columns. Throws {@link ScalarNullException} when SQL NULL
+ * is read into the unboxed variant.
+ */
 public class DoubleTypeHandler extends AbstractSimpleColumnTypeHandler {
     private final boolean boxed;
 
+    /**
+     * @param boxed True for {@link Double}, false for {@code double}.
+     */
     public DoubleTypeHandler(boolean boxed) {
         this.boxed = boxed;
     }

@@ -15,6 +15,12 @@ public class MySqlUtil {
     private MySqlUtil() {
     }
 
+    /**
+     * Appends either {@code =?} or {@code  IN (?,?,...)} to the builder, depending on collection size.
+     *
+     * @param sb         Target builder, not null.
+     * @param collection Collection whose size drives the choice, not null.
+     */
     public static void writeEqOrIn(@NonNull StringBuilder sb, @NonNull Collection<?> collection) {
         if (collection.size() == 1) {
             sb.append("=?");

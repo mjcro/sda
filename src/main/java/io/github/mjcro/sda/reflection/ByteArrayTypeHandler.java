@@ -4,6 +4,9 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Objects;
 
+/**
+ * Reads {@code byte[]} (BLOB-like) columns via {@link java.sql.ResultSet#getBytes(String)}.
+ */
 public class ByteArrayTypeHandler extends AbstractSimpleColumnTypeHandler {
     @Override
     protected boolean supports(@NonNull Class<?> clazz) {

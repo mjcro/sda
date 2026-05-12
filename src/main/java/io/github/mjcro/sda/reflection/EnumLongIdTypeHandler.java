@@ -5,6 +5,9 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 
+/**
+ * Reads an enum constant by its long id (from {@link WithId}) from a long column.
+ */
 public class EnumLongIdTypeHandler extends AbstractColumnTypeHandler {
     @Override
     protected boolean supports(@NonNull Class<?> clazz) {
